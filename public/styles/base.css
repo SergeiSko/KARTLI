@@ -1,0 +1,51 @@
+* {
+	padding: 0;
+	margin: 0;
+	outline: none;
+	font-family: 'Roboto', sans-serif;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+}
+
+a {
+	text-decoration: none;
+	color: #fff;
+}
+
+.column {
+	display: flex;
+	flex-direction: column;
+}
+
+.row {
+	display: flex;
+	flex-direction: row;
+}
+
+button {
+	background-color: transparent;
+}
+
+.fixed {
+	position: fixed;	
+	width: 100%;
+}
+
+.black {
+	background-color: #1B2631;
+}
+
+.underline {
+	border-bottom: 2px solid #fff;
+}
+
+.hidden {
+	display: none;
+}
+
+.flex {
+	display: flex;
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Список поставщиков</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="styles/base.css">
+	<link rel="stylesheet" type="text/css" href="styles/style-main.css">
+	<link href="https://fonts.googleapis.com/css?family=Concert+One|Roboto" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="js/script.js"></script></head>
+<body>
+
+	<!-- Navigation bar -->
+	<div class="bar column"></div>
+
+	<div class="hover"></div>
+
+	<div class="header row black">
+		<div class="title column">
+			<a href="index.html"><h2>LogicSySKartli</h2></a>
+			<span>Биржа грузоперевозок</span>
+		</div>
+
+		<div class="number row">
+			<img src="images/phone-sec.png" width="30px">
+			<span>8 (800) 555 35 35</span>
+			<div class="profile-wrap column">
+				<a href="profile-company.html"><img src="images/profile.png" id="profile-opener" width="32px"></a>
+				<div class="profile column">
+						<span>Имя Фамилия</span>
+						<span>Банк</span>
+						<button>Настройки</button>
+						<button type="submit">Выход</button>
+				</div>
+			</div>
+			<img src="images/burger.png" id="opener" width="25px">
+		</div>
+	</div>
+
+	<h1 class="second-title">Предложния по перевозке</h1>
+
+	<div class="main-wrap column">
+		<form class="filter row" method="post">
+			<label>
+				<span>Откуда</span>
+				<input type="text" name="from" placeholder="Город">
+			</label>
+			<label>
+				<span>Куда</span>
+				<input type="text" name="to" placeholder="Город">
+			</label>
+			<label>
+				<span>Грузоподъемность</span>
+				<input type="text" name="weight" placeholder="тонн">
+			</label>
+			<label>
+				<span>Стоимость</span>
+				<input type="text" name="prise" placeholder="$">
+			</label>
+			<input type="submit" name="search" value="Найти">
+		</form>
+
+		<div class="list-wrap column">
+			<div class="row">
+				<span>Компания</span>
+				<span>Маршрут</span>
+				<span>Грузоподъемность</span>
+				<span>Цена</span>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

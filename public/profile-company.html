@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Личный кабинет</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="styles/base.css">
+	<link rel="stylesheet" type="text/css" href="styles/style-main.css">
+	<link href="https://fonts.googleapis.com/css?family=Concert+One|Roboto" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="js/script.js"></script>
+</head>
+<body>
+
+	<!-- Navigation bar -->
+	<div class="bar column"></div>
+
+	<div class="hover"></div>
+
+	<div class="header row black">
+		<div class="title column">
+			<a href="index.html"><h2>LogicSySKartli</h2></a>
+			<span>Биржа грузоперевозок</span>
+		</div>
+
+		<div class="number row">
+			<img src="images/phone-sec.png" width="30px">
+			<span>8 (800) 555 35 35</span>
+			<div class="profile-wrap column">
+				<a href=""><img src="images/profile.png" id="profile-opener" width="32px"></a>
+				<div class="profile column">
+						<span>Имя Фамилия</span>
+						<span>Банк</span>
+						<button>Настройки</button>
+						<button>Выход</button>
+				</div>
+			</div>
+			<img src="images/burger.png" id="opener" width="25px">
+		</div>
+	</div>
+
+	<h1 class="second-title">Личный кабинет</h1>
+
+	<div class="main-wrap column">
+		<div class="list-wrap column">
+			<h2>Подробная информация</h2>
+			<form class="put-add column" method="post" action="" name="about-self">
+				<input type="text" name="name" placeholder="Введите свое имя">
+				<input type="text" name="surname" placeholder="Введите фамилию">
+				<input type="text" name="fathername" placeholder="Введите отчество">
+				<input type="text" name="phonenumber" placeholder="+7 (917) 222 22 22">
+				<span class="alert"></span>
+				<div class="btn-wrap">
+					<input type="submit" name="saver" value="Сохранить" class="disabled-btn" disabled>
+				</div>
+			</form>
+		</div>
+
+		<div class="list-wrap column">
+			<h2>Данные для авторизации в сервисе</h2>
+			<div class="row" id="row-f">
+				<span>Пароль</span>
+				<span>******</span>
+				<span class="changer" onclick="openHider(this)">Изменить</span>
+
+				<form class="put-add column hidden" method="post" action="/" id="pass-form-change">
+					<input type="password" name="cur-pass" placeholder="Введите текущий пароль">
+					<input type="password" name="new-pass" placeholder="Введите новый пароль">
+					<input type="password" name="accept-pass" placeholder="Подтвердите пароль">
+					<span class="alert"></span>
+					<div class="btn-wrap">
+						<input type="submit" name="change-password-btn" value="Сохранить" class="disabled-btn" id="btn-saver-pass" disabled>
+						<div class="cancel" onclick="cancelHider(this)">Отмена</div>
+					</div>
+				</form>
+
+			</div>
+
+			<div class="row" id="row-s">
+				<span>E-mail</span>
+				<span>sobaka@gmail.com</span>
+				<span class="changer" onclick="openHider(this)">Изменить</span>
+
+				<form class="put-add column hidden" method="post" action="" id="email-form-change">
+					<span>Ваш старый email : sobaka@gmail.com</span>
+					<input type="text" name="new-email" placeholder="Введите новый email">
+					<div class="btn-wrap ">
+						<input type="submit" name="change-email-btn" value="Сохранить" class="disabled-btn" id="btn-saver-email" disabled>
+						<div class="cancel" onclick="cancelHider(this)">Отмена</div>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
