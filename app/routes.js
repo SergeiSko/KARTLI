@@ -1,6 +1,7 @@
 
 
 module.exports = function(app, passport) {
+var updateprofile = require('../config/passport').SqlProfile;
 var mysql = require('mysql');
 var dbconfig = require('../config/database');
 var connection = mysql.createConnection(dbconfig.connection);
@@ -80,17 +81,16 @@ app.get('/', function(req, res){
 //ОБНОВЛЕНИЕ ИНФОРМАЦИИ О ПОЛЬЗОВАТЕЛЯХ
 	app.post('/updateprofile', function(req, res){
 
+
+
 		var username = req.user.username;
 		var name = req.body.name;
 		var surname = req.body.surname;
 		var fathername = req.body.fathername;
 		var phonenumber = req.body.phonenumber;
-
-	connection.query("UPDATE test.users SET name = ?, surname = ?, fathername = ?, phonenumber = ? WHERE username = ?",[name, surname, fathername, phonenumber,username], function(err, rows){
-		if(err)console.log(err);
-		});
+		console.log('updateprofile STARTED FROM routes');
+		updateprofile(name, surname, fathername, phonenumber, username);
 	});
-
 
 	app.get('/authenticate', function(req ,res){
 		if(req.isAuthenticated()) res.send(true); else res.send(false);

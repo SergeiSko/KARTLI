@@ -90,6 +90,12 @@ module.exports = function(passport) {
             });
         })
     );
+};
 
-
+//ФУНКЦИЯ ОБНОВЛЕНИЯ ПРОФИЛЯ
+module.exports.SqlProfile = function(name, surname, fathername, phonenumber, username){
+  	console.log('updateprofile STARTED FROM passport');
+  connection.query("UPDATE test.users SET name = ?, surname = ?, fathername = ?, phonenumber = ? WHERE username = ?",[name, surname, fathername, phonenumber,username], function(err, rows){
+		if(err)console.log(err);
+		});
 };
