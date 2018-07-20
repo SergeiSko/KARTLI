@@ -13,7 +13,7 @@ var passport = require('passport');
 var flash    = require('connect-flash');
 
 
-//КОНФИГ С ПАРАМЕТРАМИ БД В JSON
+//КОНФИГ С ПАРАМЕТРАМИ БД В JSON  qq
 require('./config/passport')(passport); // pass passport for configuration
 
 
