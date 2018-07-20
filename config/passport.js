@@ -1,28 +1,19 @@
 // config/passport.js
 
-// load all the things we need
+//ЭКСПОРТ СТРАТЕГИИ ЛОКАЛЬНОЙ АВТОРИЗАЦИИ
 var LocalStrategy   = require('passport-local').Strategy;
 
-// load up the user model
-var mysql = require('mysql');
-var bcrypt = require('bcrypt-nodejs');
-var dbconfig = require('./database');
+var mysql = require('mysql'); //ДЛЯ РАБОТЫ С MYSQL
+var bcrypt = require('bcrypt-nodejs'); //ДЛЯ ШИФРОВАНИЯ ПАРОЛЯ В БД
+var dbconfig = require('./database'); //
 var connection = mysql.createConnection(dbconfig.connection);
 
-connection.query('USE ' + dbconfig.database);
-// expose this function to our app using module.exports
-module.exports.updateprofile  = function(username, name, surname, fathername, phonenumber){
-    
-  };
+connection.query('USE ' + dbconfig.database);  //ПРИВЯЗКА К ТАБЛИЦЕ
+
+//ЭКСПОРТИРУЕМ ДЛЯ ИСПОЛЬЗОВАНИЯ В ДРУГИХ МОДУЛЯХ
 module.exports = function(passport) {
 
-    // =========================================================================
-    // passport session setup ==================================================
-    // =========================================================================
-    // required for persistent login sessions
-    // passport needs ability to serialize and unserialize users out of session
-
-    // used to serialize the user for the session
+    //МЕТОД СОЗДАНИЯ СЕССИИ ПОЛЬЗОВАТЕЛЯ
     passport.serializeUser(function(user, done) {
         done(null, user.id);
     });

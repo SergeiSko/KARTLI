@@ -1,5 +1,6 @@
 
 //СОЗДАНИЕ ТАБЛИЦЫ ДЛЯ БД, ЕСЛИ ОНА ОТСУТСТВУЕТ
+//ЧТОБЫ СОЗДАТЬ ТАБЛИЦУ ВЫПОЛНИТЕ СКРИПТ ЧЕРЕЗ КОНСОЛЬ
 var mysql = require('mysql');
 var dbconfig = require('../config/database');
 
