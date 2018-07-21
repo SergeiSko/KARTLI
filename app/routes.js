@@ -1,8 +1,7 @@
 // ./app/routes.js
 
 module.exports = function(app, passport) {
-var updateprofile = require('../config/passport').SqlProfile;
-var getUsername = require('../config/passport').getInfo;
+
 
 //===================================
 //МАРШРУТЫ
