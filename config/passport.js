@@ -99,3 +99,20 @@ module.exports.SqlProfile = function(name, surname, fathername, phonenumber, use
 		if(err)console.log(err);
 		});
 };
+
+module.exports.getInfo = function(res, username){
+  connection.query("SELECT * FROM users WHERE username = ?", [username], function(err, rows){
+    if(err){
+      res.end('sql not working');
+      console.log(err);
+    }
+    if(rows) {
+      var userinfo = {
+        name : rows[0].name,
+        surname : rows[0].surname,
+        mobile : rows[0].phonenumber
+      }
+      res.send(userinfo);
+    }
+  });
+}

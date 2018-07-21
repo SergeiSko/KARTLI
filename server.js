@@ -41,6 +41,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 	app.use(express.static(__dirname + "/public")); //ПОДКЛЮЧЕНИЕ СТАТИЧЕСКИХ ФАЙЛОВ
 
 require('./app/routes.js')(app, passport); // МОДУЛЬ МАРШРУТИЗАЦИИ
+require('./app/api.js')(app, passport); //МОДУЛЬ API
 
 // ЗАПУСК СЕРВЕРА ======================================================================
 app.listen(port);
