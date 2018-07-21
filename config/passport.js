@@ -5,7 +5,7 @@ var LocalStrategy   = require('passport-local').Strategy;
 
 var mysql = require('mysql'); //ДЛЯ РАБОТЫ С MYSQL
 var bcrypt = require('bcrypt-nodejs'); //ДЛЯ ШИФРОВАНИЯ ПАРОЛЯ В БД
-var dbconfig = require('./database'); //
+var dbconfig = require('./database'); //КОНФИГ С ПАРАМЕТРАМИ БД В JSON
 var connection = mysql.createConnection(dbconfig.connection);
 
 connection.query('USE ' + dbconfig.database);  //ПРИВЯЗКА К ТАБЛИЦЕ

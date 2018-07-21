@@ -81,14 +81,14 @@ app.get('/', function(req, res){
 //ОБНОВЛЕНИЕ ИНФОРМАЦИИ О ПОЛЬЗОВАТЕЛЯХ
 	app.post('/updateprofile', function(req, res){
 
-
-
 		var username = req.user.username;
 		var name = req.body.name;
 		var surname = req.body.surname;
 		var fathername = req.body.fathername;
 		var phonenumber = req.body.phonenumber;
+
 		console.log('updateprofile STARTED FROM routes');
+
 		updateprofile(name, surname, fathername, phonenumber, username);
 	});
 
@@ -100,7 +100,7 @@ app.get('/', function(req, res){
 
 
 
-//  ФУКНЦИЯ ПРОВЕРКИ АВТОРИЗАЦИИ
+//  ФУКНЦИЯ ПРОВЕРКИ АВТОРИЗАЦИИ С CALLBACK
 function isLoggedIn(req, res, next) {
 
 	// ЕСЛИ ПОЛЬЗОВАТЕЛЬ АВТОРИЗОВАН
