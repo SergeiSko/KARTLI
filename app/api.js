@@ -52,7 +52,7 @@ module.exports = function(app, passport){
 //ОБНОВЛЕНИЕ ИНФОРМАЦИИ О ПОЛЬЗОВАТЕЛЯХ
 	app.post('/updateprofile', function(req, res){
 
-		var username = req.user.username;
+		var username = req.user.email;
 		var name = req.body.name;
 		var surname = req.body.surname;
 		var fathername = req.body.fathername;
@@ -60,7 +60,7 @@ module.exports = function(app, passport){
 
 		console.log('updateprofile STARTED FROM routes');
 
-		updateprofile(name, surname, fathername, phonenumber, username);
+		updateprofile(name, surname, fathername, phonenumber,1, username);
 	});
 
 		//ПРОВЕРКА АВТОРИЗАЦИИ ПОЛЬЗОВАТЕЛЯ
@@ -73,7 +73,7 @@ module.exports = function(app, passport){
 		if(!req.user){
 			res.send('User not found');
 		} else {
-			getUsername(res, req.user.username);
+			getUsername(res, req.user.email);
 		}
 	});
 

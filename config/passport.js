@@ -7,8 +7,8 @@ var mysql = require('mysql'); //ДЛЯ РАБОТЫ С MYSQL
 var bcrypt = require('bcrypt-nodejs'); //ДЛЯ ШИФРОВАНИЯ ПАРОЛЯ В БД
 var dbconfig = require('./database'); //КОНФИГ С ПАРАМЕТРАМИ БД В JSON
 var connection = mysql.createConnection(dbconfig.connection);
-
-connection.query('USE ' + dbconfig.database);  //ПРИВЯЗКА К ТАБЛИЦЕ
+//
+connection.query('USE ' + dbconfig.database);  //ПРИВЯЗКА К дб
 
 //ЭКСПОРТИРУЕМ ДЛЯ ИСПОЛЬЗОВАНИЯ В ДРУГИХ МОДУЛЯХ
 module.exports = function(passport) {
@@ -37,7 +37,7 @@ module.exports = function(passport) {
         },
         function(req, username, password, done) {
             //ПРОВЕРЯЕМ НАЛИЧИЕ ЛОГИНА В БД, УКАЗАННОГО ПРИ РЕГИСТРАЦИИ
-            connection.query("SELECT * FROM users WHERE username = ?",[username], function(err, rows) {
+            connection.query("SELECT * FROM users WHERE email = ?",[username], function(err, rows) {
                 if (err)
                     return done(err);
                 if (rows.length) {
@@ -50,7 +50,7 @@ module.exports = function(passport) {
                         password: bcrypt.hashSync(password, null, null)  // use the generateHash function in our user model
                     };
                     //SQL ЗАПРОС НА ВСТАВКУ ПОЛЬЗОВАТЕЛЯ В БД
-                    var insertQuery = "INSERT INTO users ( username, password ) values (?,?)";
+                    var insertQuery = "INSERT INTO users ( email, password, usertypeid ) values (?,?,1)";
 
                     //ВЫПОЛНЕНИЕ SQL ЗАПРОСА
                     connection.query(insertQuery,[newUserMysql.username, newUserMysql.password],function(err, rows) {
@@ -73,7 +73,7 @@ module.exports = function(passport) {
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
         function(req, username, password, done) { // callback with email and password from our form
-            connection.query("SELECT * FROM users WHERE username = ?",[username], function(err, rows){
+            connection.query("SELECT * FROM users WHERE email = ?",[username], function(err, rows){
                 if (err)
                     return done(err);
                     //ПРОВЕРЯЕМ ЕСТЬ ЛИ ВООБЩЕ ПОЛЬЗОВАТЕЛЬ С ТАКИМ ЛОГИНОМ
@@ -93,16 +93,16 @@ module.exports = function(passport) {
 };
 
 //ФУНКЦИЯ ОБНОВЛЕНИЯ ПРОФИЛЯ
-module.exports.SqlProfile = function(name, surname, fathername, phonenumber, username){
-  //  console.log(connection.getCharsetSync());
+module.exports.SqlProfile = function(name, surname, fathername, phonenumber,usertype, username){
   	console.log('updateprofile STARTED FROM passport');
-  connection.query("UPDATE test.users SET name = ?, surname = ?, fathername = ?, phonenumber = ? WHERE username = ?",[name, surname, fathername, phonenumber,username], function(err, rows){
+  connection.query("UPDATE users SET name = ?, surname = ?, fathername = ?, phonenumber = ?, usertypeid = ? WHERE email = ?",[name, surname, fathername, phonenumber,usertype,username], function(err, rows){
 		if(err)console.log(err);
 		});
 };
 
-module.exports.getInfo = function(res, username){
-  connection.query("SELECT * FROM users WHERE username = ?", [username], function(err, rows){
+module.exports.getInfo = function(res, email){
+  var query = "SELECT * FROM users INNER JOIN usertype ON usertype.usertypeid = users.usertypeid WHERE email = ?";
+  connection.query(query, [email], function(err, rows){
     if(err){
       res.end('sql not working');
       console.log(err);
@@ -111,9 +111,13 @@ module.exports.getInfo = function(res, username){
       var userinfo = {
         name : rows[0].name,
         surname : rows[0].surname,
-        mobile : rows[0].phonenumber
+        fathername : rows[0].fathername,
+        mobile : rows[0].phonenumber,
+        usertype : rows[0].usertype,
+        cash : rows[0].cash
       }
       res.send(userinfo);
     }
   });
+
 }
