@@ -3,8 +3,15 @@ module.exports = {
     'connection': {
         'host': 'localhost',
         'user': 'root',
-        'password': ''
+        'password': '',
+        'charset': "utf8_bin"
     },
+<<<<<<< HEAD
 	'database': 'kartli',
     'users_table': 'users'
+=======
+	'database': 'kartlibeta',
+    'users_table': 'users',
+    'usertype_table' : 'usertype'
+>>>>>>> fd24adaea7a64abba07097c71a77936c513f1866
 };
