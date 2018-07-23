@@ -19,7 +19,12 @@ $(document).ready(function () {
 			url: '/userinfo',
 			type: 'GET',
 			success: function (result){
-				console.log(result.name);
+				$('form[name="about-self"] input[name="name"]').attr('value' , result.name);
+				$('form[name="about-self"] input[name="surname"]').attr('value' , result.surname);
+				$('form[name="about-self"] input[name="fathername"]').attr('value' , result.fathername);
+				$('form[name="about-self"] input[name="phonenumber"]').attr('value' , result.mobile);
+				if (result.cash != null) $('.put-add .row').children().eq(1).text(result.cash + "$");
+				else $('.put-add .row').children().eq(1).text('0$');
 			}
 		});
 	}

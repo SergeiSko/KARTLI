@@ -388,7 +388,7 @@
 	position: absolute;
 	top: 65px;
 	background-color: #1B2631;
-	padding-bottom: 20px;
+	padding: 20px;
 	z-index: 2;
 	box-shadow: 2px 3px 3px rgba(0,0,0,.9);
 	border-radius: 5px;
@@ -416,6 +416,38 @@
 	padding: 25px 0;
 }
 
+.put-add .row {
+	align-self: center;
+	width: 80%;
+	border-bottom: none;
+}
+
+.put-add .row span {
+	padding: 0;
+	width: auto;
+}
+
+.put-add .row button {
+	background-color: transparent;
+	border-radius: 5px;
+	color: #33a0ff;
+	font-weight: bold;
+	border: 1px solid #33a0ff;
+	padding: 5px 10px;
+	cursor: pointer;
+	align-self: center;
+	transition-property: background-color , color;
+	transition-duration: .5s;
+	transition-timing-function: linear;
+	text-align: center;
+	font-size: .9em;
+}
+
+.put-add .row button:hover {
+	background-color: #33a0ff;
+	color: #fff;
+}
+
 .put-add input {
 	border-radius: 0;
 	border: 1px solid #c0c0c0;
@@ -429,7 +461,7 @@
 	font-size: .9em;
 }
 
-.put-add input[type="text"]:focus {
+.put-add input[type="text"]:focus , input[type="password"]:focus {
 	border-color: #33a0ff;
 	border-radius: 100px;
 }
@@ -469,7 +501,6 @@
 	padding: 15px 20px;
 	cursor: pointer;
 	align-self: center;
-	width: 25%;
 	transition-property: background-color , color;
 	transition-duration: .5s;
 	transition-timing-function: linear;
