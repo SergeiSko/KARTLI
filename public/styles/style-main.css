@@ -274,8 +274,18 @@
 }
 
 .pop-wrap label {
-	color: #fff;
-	align-self: flex-start;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	align-self: center;
+}
+
+.pop-wrap label span {
+	color: #1B2631;
+	font-weight: bold;
+	font-size: 1.2em;
+	text-shadow: none;
 }
 
 /* second page */
