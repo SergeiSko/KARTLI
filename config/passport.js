@@ -119,5 +119,31 @@ module.exports.getInfo = function(res, email){
       res.send(userinfo);
     }
   });
-//
+}
+
+module.exports.updatemail = function(res,oldmail, newemail){
+  var oldmailquery = "SELECT * FROM users WHERE email= ?";
+  connection.query(oldmailquery,[newemail], function(err, rows){
+    if(rows) res.end('Email is already taken');
+    else{
+      var newmailquery = "UPDATE users SET email = ? WHERE email = ?";
+      connection.query(newmailquery,[newemail, oldmail], function(err, rows){
+        if(err){ console.log(err);
+          res.end('Sql not working, check console');
+        }
+        res.end('Success');
+      });
+    }
+  });
+}
+
+module.exportys.updatepassword = function(res, oldpass, newpass){
+  var oldpassquery = "UPDATE password FROM users WHERE password=?";
+  connection.query(oldpassquery, [oldpass], function(err, rows){
+    if(err){
+      console.log(err);
+      res.end('Sql not working');
+    }
+    res.end('Success');
+  });
 }

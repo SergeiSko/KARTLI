@@ -1,6 +1,8 @@
 module.exports = function(app, passport){
   var updateprofile = require('../config/passport').SqlProfile;
   var getUsername = require('../config/passport').getInfo;
+  var updatemail = require('../config/passport').updatemail;
+  var updatepassword = require('../config/passport').updatepassword;
   //=======================================
   // API
   //========================================
@@ -62,7 +64,22 @@ module.exports = function(app, passport){
 
 		updateprofile(name, surname, fathername, phonenumber,1, username);
 	});
-
+app.post('/updatemail', function(req, res){
+  if(req.isAuthenticated()){
+      var oldmail = req.user.email;
+      var newmail = req.body.newemail;
+      updatemail(res, oldmail, newmail );
+  }
+});
+app.pos('/updatepassword', function(req, res){
+  if(req.isAuthenticated()){
+    var oldpass = req.user.password;  //Старый пароль пользователя
+    var bodyoldpass = req.body.oldpassword;  //Старый пароль, который ввели на странице смены пароля
+    var bodynewpass = req.body.newpassword;
+    if(oldpass==bodyoldpass) updatepassword(req, res, oldpass, newpass);
+    else res.end('Неправильный пароль');
+  }
+})
 		//ПРОВЕРКА АВТОРИЗАЦИИ ПОЛЬЗОВАТЕЛЯ
 	app.get('/authenticate', function(req ,res){
 		if(req.isAuthenticated()) res.send(true); else res.send(false);
