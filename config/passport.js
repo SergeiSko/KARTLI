@@ -119,5 +119,5 @@ module.exports.getInfo = function(res, email){
       res.send(userinfo);
     }
   });
-
+//
 }

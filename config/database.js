@@ -10,3 +10,4 @@ module.exports = {
     'users_table': 'users',
     'usertype_table' : 'usertype'
 };
+//

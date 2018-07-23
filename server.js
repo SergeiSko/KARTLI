@@ -16,7 +16,7 @@ var flash    = require('connect-flash');
 
 require('./config/passport')(passport); // pass passport for configuration
 
-
+//
 
 // УСТАНОВКА EXPRESS
 app.use(morgan('dev')); //ВЫВОД В КОНСОЛЬ КАЖДОГО ЗАПРОСА ДЛЯ ОТЛАДКИ
