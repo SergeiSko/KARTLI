@@ -29,7 +29,7 @@ app.get('/', function(req, res){
 }; //КОНЕЦ ЭКСПОРТА
 
 
-//  MIDDLEWARE ПРОВЕРКИ АВТОРИЗАЦИИ С CALLBACK
+//  MIDDLEWARE ПРОВЕРКИ АВТОРИЗАЦИИ С CALLBACK /
 function isLoggedIn(req, res, next) {
 
 	// ЕСЛИ ПОЛЬЗОВАТЕЛЬ АВТОРИЗОВАН

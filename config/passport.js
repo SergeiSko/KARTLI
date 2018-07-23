@@ -10,19 +10,7 @@ var connection = mysql.createConnection(dbconfig.connection);
 //
 connection.query('USE ' + dbconfig.database);  //ПРИВЯЗКА К дб
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-connection.query('USE ' + dbconfig.database);
-// expose this function to our app using module.exports
-module.exports.updateprofile  = function(username, name, surname, fathername, phonenumber){
-
-  };
-=======
 //ЭКСПОРТИРУЕМ ДЛЯ ИСПОЛЬЗОВАНИЯ В ДРУГИХ МОДУЛЯХ
->>>>>>> fd24adaea7a64abba07097c71a77936c513f1866
-=======
-//ЭКСПОРТИРУЕМ ДЛЯ ИСПОЛЬЗОВАНИЯ В ДРУГИХ МОДУЛЯХ
->>>>>>> fd24adaea7a64abba07097c71a77936c513f1866
 module.exports = function(passport) {
 
     //МЕТОД СОЗДАНИЯ СЕССИИ ПОЛЬЗОВАТЕЛЯ
@@ -131,5 +119,5 @@ module.exports.getInfo = function(res, email){
       res.send(userinfo);
     }
   });
-
+//
 }

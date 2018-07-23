@@ -5,7 +5,7 @@ module.exports = function(app, passport){
   // API
   //========================================
 
-  //АВТОРИЗАЦИЯ
+  //АВТОРИЗАЦИЯ /
   	app.post('/login', passport.authenticate('local-login', {
               successRedirect : '/products', // redirect to the secure profile section
               failureRedirect : '/loginerror', // redirect back to the signup page if there is an error
