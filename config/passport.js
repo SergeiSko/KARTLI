@@ -1,45 +1,44 @@
 // config/passport.js
 
-// load all the things we need
+//ЭКСПОРТ СТРАТЕГИИ ЛОКАЛЬНОЙ АВТОРИЗАЦИИ
 var LocalStrategy   = require('passport-local').Strategy;
 
-// load up the user model
-var mysql = require('mysql');
-var bcrypt = require('bcrypt-nodejs');
-var dbconfig = require('./database');
+var mysql = require('mysql'); //ДЛЯ РАБОТЫ С MYSQL
+var bcrypt = require('bcrypt-nodejs'); //ДЛЯ ШИФРОВАНИЯ ПАРОЛЯ В БД
+var dbconfig = require('./database'); //КОНФИГ С ПАРАМЕТРАМИ БД В JSON
 var connection = mysql.createConnection(dbconfig.connection);
+//
+connection.query('USE ' + dbconfig.database);  //ПРИВЯЗКА К дб
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 connection.query('USE ' + dbconfig.database);
 // expose this function to our app using module.exports
 module.exports.updateprofile  = function(username, name, surname, fathername, phonenumber){
-    
+
   };
+=======
+//ЭКСПОРТИРУЕМ ДЛЯ ИСПОЛЬЗОВАНИЯ В ДРУГИХ МОДУЛЯХ
+>>>>>>> fd24adaea7a64abba07097c71a77936c513f1866
+=======
+//ЭКСПОРТИРУЕМ ДЛЯ ИСПОЛЬЗОВАНИЯ В ДРУГИХ МОДУЛЯХ
+>>>>>>> fd24adaea7a64abba07097c71a77936c513f1866
 module.exports = function(passport) {
 
-    // =========================================================================
-    // passport session setup ==================================================
-    // =========================================================================
-    // required for persistent login sessions
-    // passport needs ability to serialize and unserialize users out of session
-
-    // used to serialize the user for the session
+    //МЕТОД СОЗДАНИЯ СЕССИИ ПОЛЬЗОВАТЕЛЯ
     passport.serializeUser(function(user, done) {
         done(null, user.id);
     });
 
-    // used to deserialize the user
+    //МЕТОД УДАЛЕНИЯ СЕССИИ ПОЛЬЗОВАТЕЛЯ
     passport.deserializeUser(function(id, done) {
         connection.query("SELECT * FROM users WHERE id = ? ",[id], function(err, rows){
             done(err, rows[0]);
         });
     });
 
-    // =========================================================================
-    // LOCAL SIGNUP ============================================================
-    // =========================================================================
-    // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
 
+    //ПАСПОРТ СТРАТЕГИЯ ДЛЯ РЕГИСТРАЦИИ
     passport.use(
         'local-signup',
         new LocalStrategy({
@@ -49,13 +48,12 @@ module.exports = function(passport) {
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
         function(req, username, password, done) {
-            // find a user whose email is the same as the forms email
-            // we are checking to see if the user trying to login already exists
-            connection.query("SELECT * FROM users WHERE username = ?",[username], function(err, rows) {
+            //ПРОВЕРЯЕМ НАЛИЧИЕ ЛОГИНА В БД, УКАЗАННОГО ПРИ РЕГИСТРАЦИИ
+            connection.query("SELECT * FROM users WHERE email = ?",[username], function(err, rows) {
                 if (err)
                     return done(err);
                 if (rows.length) {
-                    return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
+                    return done(null, false, req.flash('signupMessage', 'ПОЛЬЗОВАТЕЛЬ С ТАКИМ ЛОГИНОМ УЖЕ СУЩЕСТВУЕТ'));
                 } else {
                     // if there is no user with that username
                     // create the user
@@ -63,12 +61,12 @@ module.exports = function(passport) {
                         username: username,
                         password: bcrypt.hashSync(password, null, null)  // use the generateHash function in our user model
                     };
+                    //SQL ЗАПРОС НА ВСТАВКУ ПОЛЬЗОВАТЕЛЯ В БД
+                    var insertQuery = "INSERT INTO users ( email, password, usertypeid ) values (?,?,1)";
 
-                    var insertQuery = "INSERT INTO users ( username, password ) values (?,?)";
-
+                    //ВЫПОЛНЕНИЕ SQL ЗАПРОСА
                     connection.query(insertQuery,[newUserMysql.username, newUserMysql.password],function(err, rows) {
                         newUserMysql.id = rows.insertId;
-
                         return done(null, newUserMysql);
                     });
                 }
@@ -76,12 +74,8 @@ module.exports = function(passport) {
         })
     );
 
-    // =========================================================================
-    // LOCAL LOGIN =============================================================
-    // =========================================================================
-    // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
 
+    //ПАСПОРТ СТРАТЕГИЯ НА АВТОРИЗАЦИЮ ПОЛЬЗОВАТЕЛЯ
     passport.use(
         'local-login',
         new LocalStrategy({
@@ -91,22 +85,51 @@ module.exports = function(passport) {
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
         function(req, username, password, done) { // callback with email and password from our form
-            connection.query("SELECT * FROM users WHERE username = ?",[username], function(err, rows){
+            connection.query("SELECT * FROM users WHERE email = ?",[username], function(err, rows){
                 if (err)
                     return done(err);
+                    //ПРОВЕРЯЕМ ЕСТЬ ЛИ ВООБЩЕ ПОЛЬЗОВАТЕЛЬ С ТАКИМ ЛОГИНОМ
                 if (!rows.length) {
                     return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
                 }
 
-                // if the user is found but the password is wrong
+                //ЕСЛИ ВСЕ ОКЕЙ, ТО ДАЛЬШЕ ПРОВЕРЯЕТСЯ ПАРОЛЬ
                 if (!bcrypt.compareSync(password, rows[0].password))
-                    return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+                    return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
 
-                // all is well, return successful user
+                // ЕСЛИ ПОДОШЕЛ ПАРОЛЬ ТО ВОЗВРАЩАЕМ ПОЛЕ ПОЛЬЗОВАТЕЛЯ ИЗ БД
                 return done(null, rows[0]);
             });
         })
     );
-
-
 };
+
+//ФУНКЦИЯ ОБНОВЛЕНИЯ ПРОФИЛЯ
+module.exports.SqlProfile = function(name, surname, fathername, phonenumber,usertype, username){
+  	console.log('updateprofile STARTED FROM passport');
+  connection.query("UPDATE users SET name = ?, surname = ?, fathername = ?, phonenumber = ?, usertypeid = ? WHERE email = ?",[name, surname, fathername, phonenumber,usertype,username], function(err, rows){
+		if(err)console.log(err);
+		});
+};
+
+module.exports.getInfo = function(res, email){
+  var query = "SELECT * FROM users INNER JOIN usertype ON usertype.usertypeid = users.usertypeid WHERE email = ?";
+  connection.query(query, [email], function(err, rows){
+    if(err){
+      res.end('sql not working');
+      console.log(err);
+    }
+    if(rows) {
+      var userinfo = {
+        name : rows[0].name,
+        surname : rows[0].surname,
+        fathername : rows[0].fathername,
+        mobile : rows[0].phonenumber,
+        usertype : rows[0].usertype,
+        cash : rows[0].cash
+      }
+      res.send(userinfo);
+    }
+  });
+
+}
