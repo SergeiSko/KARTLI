@@ -273,6 +273,10 @@
 	transform: scale(.9);
 }
 
+.pop-wrap label {
+	color: #fff;
+	align-self: flex-start;
+}
 
 /* second page */
 
@@ -461,7 +465,7 @@
 	font-size: .9em;
 }
 
-.put-add input[type="text"]:focus , input[type="password"]:focus {
+.put-add input[type="text"]:focus , .put-add input[type="password"]:focus {
 	border-color: #33a0ff;
 	border-radius: 100px;
 }
