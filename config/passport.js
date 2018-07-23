@@ -10,19 +10,12 @@ var connection = mysql.createConnection(dbconfig.connection);
 //
 connection.query('USE ' + dbconfig.database);  //ПРИВЯЗКА К дб
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 connection.query('USE ' + dbconfig.database);
 // expose this function to our app using module.exports
 module.exports.updateprofile  = function(username, name, surname, fathername, phonenumber){
 
   };
-=======
-//ЭКСПОРТИРУЕМ ДЛЯ ИСПОЛЬЗОВАНИЯ В ДРУГИХ МОДУЛЯХ
->>>>>>> fd24adaea7a64abba07097c71a77936c513f1866
-=======
-//ЭКСПОРТИРУЕМ ДЛЯ ИСПОЛЬЗОВАНИЯ В ДРУГИХ МОДУЛЯХ
->>>>>>> fd24adaea7a64abba07097c71a77936c513f1866
+
 module.exports = function(passport) {
 
     //МЕТОД СОЗДАНИЯ СЕССИИ ПОЛЬЗОВАТЕЛЯ
@@ -37,6 +30,24 @@ module.exports = function(passport) {
         });
     });
 
+    //ПОИСК ПОСТАВЩИКОВ ПО НЕОМБХОДИМЫМ ПАРАМЕТРАМ
+
+    passport.searchTesk(function(start_city, finish_city, mass, price){
+      var mysql = require("mysql");
+      connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        port: 3306
+      });
+      connection.connect();
+      var query = connection.query("SELECT * FROM route "+
+      "WHERE start_city = (SELECT city_id FROM city WHERE name='"+start_city+"'"+
+      "AND finish_city = (SELECT city_id FROM city WHERE name='"+finish_city+"'))",
+      function(err, res){ if(err) console.log(err);}
+    );
+    connection.end();
+  });
 
     //ПАСПОРТ СТРАТЕГИЯ ДЛЯ РЕГИСТРАЦИИ
     passport.use(
