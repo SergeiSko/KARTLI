@@ -1,8 +1,6 @@
 // ./app/routes.js
 
 module.exports = function(app, passport) {
-
-
 //===================================
 //МАРШРУТЫ
 //===================================
@@ -28,9 +26,7 @@ app.get('/', function(req, res){
 });
 
 
-
 }; //КОНЕЦ ЭКСПОРТА
-
 
 
 //  MIDDLEWARE ПРОВЕРКИ АВТОРИЗАЦИИ С CALLBACK

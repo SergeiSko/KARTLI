@@ -52,7 +52,7 @@ module.exports = function(app, passport){
 //ОБНОВЛЕНИЕ ИНФОРМАЦИИ О ПОЛЬЗОВАТЕЛЯХ
 	app.post('/updateprofile', function(req, res){
 
-		var username = req.user.username;
+		var username = req.user.email;
 		var name = req.body.name;
 		var surname = req.body.surname;
 		var fathername = req.body.fathername;
@@ -60,8 +60,30 @@ module.exports = function(app, passport){
 
 		console.log('updateprofile STARTED FROM routes');
 
-		updateprofile(name, surname, fathername, phonenumber, username);
+		updateprofile(name, surname, fathername, phonenumber,1, username);
 	});
+  global.vol1 = "Kazan";
+  global.vol1 = "Moscow";
+  //ПОИСК ПОСТАВЩИКОВ ПО НЕОМБХОДИМЫМ ПАРАМЕТРАМ
+  var mysql = require("mysql");
+  connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    port: 3306
+  });
+  connection.connect()
+  app.post('/searchTesk', function(req, res){
+    var query = connection.query("SELECT city_id FROM city WHERE name='Kazan'", function(err, res){
+
+    });
+    //res.send(global.vol1);
+
+
+
+    //req.body.from--возвращает содержимое формы "откуда"
+    //res.send("Работает!!!");
+  });
 
 		//ПРОВЕРКА АВТОРИЗАЦИИ ПОЛЬЗОВАТЕЛЯ
 	app.get('/authenticate', function(req ,res){
@@ -73,7 +95,7 @@ module.exports = function(app, passport){
 		if(!req.user){
 			res.send('User not found');
 		} else {
-			getUsername(res, req.user.username);
+			getUsername(res, req.user.email);
 		}
 	});
 

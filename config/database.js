@@ -6,6 +6,8 @@ module.exports = {
         'password': '',
         'charset': "utf8_bin"
     },
-	'database': 'test',
-    'users_table': 'users'
+	'database': 'kartlibeta',
+    'users_table': 'users',
+    'usertype_table' : 'usertype'
+
 };
