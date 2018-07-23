@@ -71,7 +71,7 @@ app.post('/updatemail', function(req, res){
       updatemail(res, oldmail, newmail );
   }
 });
-app.pos('/updatepassword', function(req, res){
+app.post('/updatepassword', function(req, res){
   if(req.isAuthenticated()){
     var oldpass = req.user.password;  //Старый пароль пользователя
     var bodyoldpass = req.body.oldpassword;  //Старый пароль, который ввели на странице смены пароля

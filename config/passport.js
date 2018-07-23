@@ -124,7 +124,14 @@ module.exports.getInfo = function(res, email){
 module.exports.updatemail = function(res,oldmail, newemail){
   var oldmailquery = "SELECT * FROM users WHERE email= ?";
   connection.query(oldmailquery,[newemail], function(err, rows){
-    if(rows) res.end('Email is already taken');
+    if(err){
+      console.log(err);
+      res.end('SQL not working');
+    }
+    if(rows.length){
+      res.end('Email is already taken');
+      console.log(rows);
+    }
     else{
       var newmailquery = "UPDATE users SET email = ? WHERE email = ?";
       connection.query(newmailquery,[newemail, oldmail], function(err, rows){
@@ -137,7 +144,7 @@ module.exports.updatemail = function(res,oldmail, newemail){
   });
 }
 
-module.exportys.updatepassword = function(res, oldpass, newpass){
+module.exports.updatepassword = function(res, oldpass, newpass){
   var oldpassquery = "UPDATE password FROM users WHERE password=?";
   connection.query(oldpassquery, [oldpass], function(err, rows){
     if(err){
