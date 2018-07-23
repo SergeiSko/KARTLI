@@ -1,16 +1,28 @@
 $(document).ready(function () {
 
-	$.ajax({
-			url: '/authenticate',
+	if ($('div.black')) {
+		$.ajax({
+				url: '/authenticate',
+				type: 'GET',
+				success: function (result){
+					if (result == true) {
+						$('div.black').load('login-header.html');
+					} else {
+						$('div.black').load('header.html');
+					}
+				}
+		});
+	}
+
+	if ($(location).attr('href') == 'http://localhost:3000/profile') {
+		$.ajax({
+			url: '/userinfo',
 			type: 'GET',
 			success: function (result){
-				if (result == true && $('div.black')) {
-					$('div.black').load('login-header.html');
-				} else {
-					$('div.black').load('header.html');
-				}
+				console.log(result.name);
 			}
-	});
+		});
+	}
 
 	$('div.bar').load('bar.html');
 
@@ -33,6 +45,36 @@ $(document).ready(function () {
 						$(location).attr('href' , '/profile');
 					}, 1000);
 				}
+			}
+		});
+
+		e.preventDefault();
+	});
+
+	$('#pass-form-change').submit(function(e){
+		var data = $(this).serialize();
+
+		$.ajax({
+			url: '/updatepassword',
+			type: 'POST',
+			data: data,
+			success: function (result) {
+				console.log(result);
+			}
+		});
+
+		e.preventDefault();
+	});
+
+	$('#email-form-change').submit(function(e){
+		var data = $(this).serialize();
+
+		$.ajax({
+			url: '/updatemail',
+			type: 'POST',
+			data: data,
+			success: function (result) {
+				console.log(result);
 			}
 		});
 
