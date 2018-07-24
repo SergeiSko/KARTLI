@@ -1,8 +1,8 @@
 module.exports = function(app, passport){
-  var updateprofile = require('../config/passport').SqlProfile;
-  var getUsername = require('../config/passport').getInfo;
-  var updatemail = require('../config/passport').updatemail;
-  var updatepassword = require('../config/passport').updatepassword;
+  var updateprofile = require('../utils/passport').SqlProfile;
+  var getUsername = require('../utils/passport').getInfo;
+  var updatemail = require('../utils/passport').updatemail;
+  var updatepassword = require('../utils/passport').updatepassword;
   //=======================================
   // API
   //========================================
