@@ -12,7 +12,7 @@ var port     = process.env.PORT || 3000;
 var passport = require('passport');
 var flash    = require('connect-flash');
 
-
+// TEST TEST
 
 require('./config/passport')(passport); // pass passport for configuration
 
