@@ -1,8 +1,8 @@
 module.exports = function(app, passport){
-  var updateprofile = require('../utils/passport').SqlProfile;
-  var getUsername = require('../utils/passport').getInfo;
-  var updatemail = require('../utils/passport').updatemail;
-  var updatepassword = require('../utils/passport').updatepassword;
+  var updateprofile = require('../utils/sql_util').SqlProfile;
+  var getUsername = require('../utils/sql_util').getInfo;
+  var updatemail = require('../utils/sql_util').updatemail;
+  var updatepassword = require('../utils/sql_util').updatepassword;
   //=======================================
   // API
   //========================================
@@ -42,7 +42,7 @@ module.exports = function(app, passport){
 );
 
  app.get('/signuperror', function(req, res){
-	res.send("Такой логин уже существует");
+	res.end("Такой логин уже существует");
 });
 
 //ВЫХОД
@@ -64,6 +64,8 @@ module.exports = function(app, passport){
 
 		updateprofile(name, surname, fathername, phonenumber,1, username);
 	});
+
+  //СМЕНА ПОЧТЫ
 app.post('/updatemail', function(req, res){
   if(req.isAuthenticated()){
       var oldmail = req.user.email;
@@ -71,7 +73,9 @@ app.post('/updatemail', function(req, res){
       updatemail(res, oldmail, newmail );
   }
 });
-app.post('/updatepassword', function(req, res){
+
+    //СМЕНА ПАРОЛЯ
+  app.post('/updatepassword', function(req, res){
   if(req.isAuthenticated()){
     var bodyoldpass = req.body.oldpassword;  //Старый пароль, который ввели на странице смены пароля
     var bodynewpass = req.body.newpassword;
@@ -95,4 +99,21 @@ app.post('/updatepassword', function(req, res){
 		}
 	});
 
+  //
+  app.post('/order',_authcheck, function(req, res){
+    var product = req.body.product;
+    var buyer = req.body.buyer;
+    var seller = req.body.seller;
+
+  });
+}
+
+//Middleware для проверки аутенфикации клиента
+function _authcheck(req, res, next){
+      if(req.isAuthenticated()){
+        return next();
+      }
+      else {
+        res.end('User is not authenticated');
+      }
 }
