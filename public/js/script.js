@@ -136,11 +136,11 @@ $(document).ready(function () {
 		$('.alert').text('');
 	});
 
-	var $curr_pass = $('#pass-form-change input[name="cur-pass"]');
+	var $curr_pass = $('#pass-form-change input[name="oldpassword"]');
 	var $new_pass = $('#pass-form-change input[name="new-pass"]');
-	var $accept_pass = $('#pass-form-change input[name="accept-pass"]');
+	var $accept_pass = $('#pass-form-change input[name="newpassword"]');
 	var $btn_saver = $('#btn-saver-pass');
-	var $new_email = $('#email-form-change input[name="new-email"]');
+	var $new_email = $('#email-form-change input[name="newemail"]');
 	var $btn_saver_e = $('#btn-saver-email');
 	var $name = $('form[name="about-self"] input[name="name"]');
 	var $surname = $('form[name="about-self"] input[name="surname"]');

@@ -73,11 +73,12 @@ app.post('/updatemail', function(req, res){
 });
 app.post('/updatepassword', function(req, res){
   if(req.isAuthenticated()){
-    var oldpass = req.user.password;  //Старый пароль пользователя
     var bodyoldpass = req.body.oldpassword;  //Старый пароль, который ввели на странице смены пароля
     var bodynewpass = req.body.newpassword;
-    if(oldpass==bodyoldpass) updatepassword(req, res, oldpass, newpass);
-    else res.end('Неправильный пароль');
+    var email = req.user.email;
+    updatepassword(res,email, bodyoldpass, bodynewpass);
+  } else {
+    res.end('permission denied');
   }
 })
 		//ПРОВЕРКА АВТОРИЗАЦИИ ПОЛЬЗОВАТЕЛЯ

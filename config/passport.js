@@ -144,13 +144,27 @@ module.exports.updatemail = function(res,oldmail, newemail){
   });
 }
 
-module.exports.updatepassword = function(res, oldpass, newpass){
-  var oldpassquery = "UPDATE password FROM users WHERE password=?";
-  connection.query(oldpassquery, [oldpass], function(err, rows){
-    if(err){
-      console.log(err);
-      res.end('Sql not working');
+module.exports.updatepassword = function(res, email, oldpassword, newpassword){
+  var oldpass = bcrypt.hashSync(oldpassword, null, null);
+  var newpass = bcrypt.hashSync(newpassword, null, null);
+  console.log( oldpass, newpass);
+  connection.query("SELECT password FROM users WHERE email = ?", [email], function(err, rows){
+    if(err) console.log(err);
+    if(rows.length) {
+      if(bcrypt.compareSync(oldpassword, rows[0].password)) {
+        var oldpassquery = "UPDATE users SET password = ? WHERE email =?";
+        connection.query(oldpassquery, [newpass, email], function(err, rows){
+          if(err){
+            console.log(err);
+            res.end('Sql not working');
+          }
+          res.end('Success');
+        });
+      } else {
+        res.end('password incorrect');
+      }
     }
-    res.end('Success');
+
   });
+
 }
