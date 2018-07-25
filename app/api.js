@@ -1,16 +1,17 @@
 module.exports = function(app, passport){
-  var updateprofile = require('../utils/sql_util').SqlProfile;
+  var updateprofile = require('../utils/sql_util').updateProfile;
   var getUsername = require('../utils/sql_util').getInfo;
-  var updatemail = require('../utils/sql_util').updatemail;
-  var updatepassword = require('../utils/sql_util').updatepassword;
+  var updatemail = require('../utils/sql_util').updateMail;
+  var updatepassword = require('../utils/sql_util').updatePassword;
+  var order = require('../utils/sql_util').order;
   //=======================================
   // API
   //========================================
 
   //АВТОРИЗАЦИЯ /
   	app.post('/login', passport.authenticate('local-login', {
-              successRedirect : '/products', // redirect to the secure profile section
-              failureRedirect : '/loginerror', // redirect back to the signup page if there is an error
+              successRedirect: true,
+              failureRedirect: true,
               failureFlash : false // allow flash messages
   		}),
           function(req, res) {
@@ -26,14 +27,10 @@ module.exports = function(app, passport){
       });
 
 
-  		app.get('/loginerror', function(req, res){
-  			res.send('Неправильный логин или пароль');
-  		});
-
   //РЕГИСТРАЦИЯ
   app.post('/signup', passport.authenticate('local-signup', {
-		successRedirect : '/profile', // redirect to the secure profile section
-		failureRedirect : '/signuperror', // redirect back to the signup page if there is an error
+		successRedirect : true, // redirect to the secure profile section
+		failureRedirect : true, // redirect back to the signup page if there is an error
 		failureFlash : false // allow flash messages
 	}),
 	function(req, res){
@@ -52,11 +49,11 @@ module.exports = function(app, passport){
 	});
 
 //ОБНОВЛЕНИЕ ИНФОРМАЦИИ О ПОЛЬЗОВАТЕЛЯХ
-	app.post('/updateprofile', function(req, res){
+	app.post('/updateprofile',_authcheck, function(req, res){
 
 		var username = req.user.email;
 		var name = req.body.name;
-		var surname = req.body.surname;
+  	var surname = req.body.surname;
 		var fathername = req.body.fathername;
 		var phonenumber = req.body.phonenumber;
 
@@ -66,7 +63,7 @@ module.exports = function(app, passport){
 	});
 
   //СМЕНА ПОЧТЫ
-app.post('/updatemail', function(req, res){
+app.post('/updatemail',_authcheck, function(req, res){
   if(req.isAuthenticated()){
       var oldmail = req.user.email;
       var newmail = req.body.newemail;
@@ -75,15 +72,13 @@ app.post('/updatemail', function(req, res){
 });
 
     //СМЕНА ПАРОЛЯ
-  app.post('/updatepassword', function(req, res){
-  if(req.isAuthenticated()){
+  app.post('/updatepassword',_authcheck, function(req, res){
+
     var bodyoldpass = req.body.oldpassword;  //Старый пароль, который ввели на странице смены пароля
     var bodynewpass = req.body.newpassword;
     var email = req.user.email;
     updatepassword(res,email, bodyoldpass, bodynewpass);
-  } else {
-    res.end('permission denied');
-  }
+
 })
 		//ПРОВЕРКА АВТОРИЗАЦИИ ПОЛЬЗОВАТЕЛЯ
 	app.get('/authenticate', function(req ,res){
@@ -91,20 +86,24 @@ app.post('/updatemail', function(req, res){
 	});
 
 //ПОЛУЧЕНИЕ ИМЕНИ, ФАМИЛИИ И НОМЕРА ТЕЛЕФОНА В JSON формате (name, surname, mobile)
-	app.get('/userinfo', function(req, res){
-		if(!req.user){
-			res.send('User not found');
-		} else {
+	app.get('/userinfo',_authcheck, function(req, res){
+
 			getUsername(res, req.user.email);
-		}
 	});
 
-  //
+  //Оформиление заказа
   app.post('/order',_authcheck, function(req, res){
-    var product = req.body.product;
-    var buyer = req.body.buyer;
+    var product = {
+      name : req.body.productname,
+      price : req.body.price,
+      route : req.body.route,
+      company : req.body.company
+    };
+    //product { RoadId: , UserId(Клиент): , State: , CompanyId: ,price:  }
+    var client = req.body.buyer;
     var seller = req.body.seller;
-
+    order(res, client, seller, product);
+    //res, clientlogin, sellerlogin, product)
   });
 }
 
@@ -114,6 +113,8 @@ function _authcheck(req, res, next){
         return next();
       }
       else {
-        res.end('User is not authenticated');
+        res.sendStatus(401);
       }
 }
+// 401: Unauthorized
+//200 : OK

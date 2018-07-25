@@ -6,7 +6,8 @@ var connection = mysql.createConnection(dbconfig.connection);
 connection.query('USE ' + dbconfig.database);  //ПРИВЯЗКА К дб
 
 //ФУНКЦИЯ ОБНОВЛЕНИЯ ПРОФИЛЯ
-module.exports.SqlProfile = function(name, surname, fathername, phonenumber,usertype, username){
+module.exports.updateProfile = function(name, surname, fathername, phonenumber,usertype, username){
+
   	console.log('updateprofile STARTED FROM passport');
   connection.query("UPDATE users SET name = ?, surname = ?, fathername = ?, phonenumber = ?, usertypeid = ? WHERE email = ?",[name, surname, fathername, phonenumber,usertype,username], function(err, rows){
 		if(err)console.log(err);
@@ -16,10 +17,7 @@ module.exports.SqlProfile = function(name, surname, fathername, phonenumber,user
 module.exports.getInfo = function(res, email){
   var query = "SELECT * FROM users INNER JOIN usertype ON usertype.usertypeid = users.usertypeid WHERE email = ?";
   connection.query(query, [email], function(err, rows){
-    if(err){
-      res.end('sql not working');
-      console.log(err);
-    }
+    _checkError(err, res);
     if(rows) {
       var userinfo = {
         name : rows[0].name,
@@ -34,49 +32,87 @@ module.exports.getInfo = function(res, email){
   });
 }
 
-module.exports.updatemail = function(res,oldmail, newemail){
+module.exports.updateMail = function(res,oldmail, newemail){
   var oldmailquery = "SELECT * FROM users WHERE email= ?";
   connection.query(oldmailquery,[newemail], function(err, rows){
-    if(err){
-      console.log(err);
-      res.end('SQL not working');
-    }
+
+    _checkError(err, res);
+
     if(rows.length){
-      res.end('Email is already taken');
+      res.send('Email is already taken');
       console.log(rows);
     }
     else{
       var newmailquery = "UPDATE users SET email = ? WHERE email = ?";
       connection.query(newmailquery,[newemail, oldmail], function(err, rows){
-        if(err){ console.log(err);
-          res.end('Sql not working, check console');
-        }
-        res.end('Success');
+        _checkError(err, res);
+        res.send('Success');
       });
     }
   });
 }
 
-module.exports.updatepassword = function(res, email, oldpassword, newpassword){
-  var oldpass = bcrypt.hashSync(oldpassword, null, null);
-  var newpass = bcrypt.hashSync(newpassword, null, null);
-  console.log( oldpass, newpass);
+module.exports.updatePassword = function(res, email, oldpassword, newpassword){
+
+  var oldpass = bcrypt.hashSync(oldpassword, null, null);  //ГЕНЕРАЦИЯ ХЕША ДЛЯ СТАРОГО ВВЕДЕННОГО ПАРОЛЯ
+  var newpass = bcrypt.hashSync(newpassword, null, null); //ГЕНЕРАЦИЯ ХЕША ДЛЯ НОВОГО ВВЕДЕННОГО ПАРОЛЯ
+
   connection.query("SELECT password FROM users WHERE email = ?", [email], function(err, rows){
-    if(err) console.log(err);
+    _checkError(err, res);
+
     if(rows.length) {
-      if(bcrypt.compareSync(oldpassword, rows[0].password)) {
+
+      if(bcrypt.compareSync(oldpassword, rows[0].password)) {             //СРАВНЕНИЕ ПАРОЛЕЙ СТАРОГО ВВЕДЕННОГО ПАРОЛЯ
+
         var oldpassquery = "UPDATE users SET password = ? WHERE email =?";
+
         connection.query(oldpassquery, [newpass, email], function(err, rows){
-          if(err){
-            console.log(err);
-            res.end('Sql not working');
-          }
-          res.end('Success');
+          _checkError(err, res);
+
+          res.send('Success');
         });
       } else {
-        res.end('password incorrect');
+        res.send('password incorrect');
       }
     }
   });
+}
 
+module.exports.order = function(res, clientlogin, sellerlogin, product){
+
+  var getClientCash = "SELECT cash FROM users WHERE = email?";
+  var clientCashDecrease = "UPDATE users SET cash = cash - ? WHERE email = ?";
+  var sellerCashIncrease = "UPDATE users SET cash = cash + ? WHERE email = ?";
+  var insertOrder = "INSERT INTO orders (RoadId, id, State, CompanyId, Price) VALUES(?, ?, ?, ?, ?) ";
+
+   connection.query(getClientCash, [clientlogin], function(err, rows){
+     _checkError(err, res);
+
+          if(rows[0].cash>product.price){
+              connection.query(clientCashDecrease, [product.price, clientlogin], function(err, rows){  //Снимаем деньги с покупателя
+                _checkError(err, res);
+
+              });
+
+              connection.query(sellerCashIncrease, [product.price, sellerlogin], function(err, rows){ //добавляем деньги поставщику
+                _checkError(err, res);
+              });
+
+              connection.query(insertOrder, [product.RoadId, product.UserId, product.State, product.CompanyId, product.price], function(err, rows){ //Добавление заказа в бд
+                _checkError(err, res);
+                res.send("Заказ успешно оформлен");
+              });
+
+          } else {
+
+            res.send('Недостаточно средств !');
+          }
+   });
+}
+
+function _checkError(error, response){
+  if(error){
+    response.end("SQL not working. Please inform admins");
+    console.log(error);
+  }
 }
