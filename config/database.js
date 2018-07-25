@@ -8,5 +8,5 @@ module.exports = {
     },
 	'database': 'kartli',
     'users_table': 'users',
-    'usertype_table' : 'usertype'
+    'usertype_table' : 'user_type'
 };

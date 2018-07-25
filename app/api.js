@@ -1,6 +1,7 @@
 module.exports = function(app, passport){
   var updateprofile = require('../config/passport').SqlProfile;
   var getUsername = require('../config/passport').getInfo;
+  var searchTesk = require('../config/passport').searchTesk;
   //=======================================
   // API
   //========================================
@@ -64,12 +65,13 @@ module.exports = function(app, passport){
 	});
 
   app.post('/searchTesk', function(req, res){
-      
+         searchTesk(req.body.from, req.body.to, req.body.weight, req.body.prise,res );
+
     });
-    //res.send(global.vol1);
+    //start_city, finish_city, mass, price, res
     //req.body.from--возвращает содержимое формы "откуда"
     //res.send("Работает!!!");
-  });
+
 
 		//ПРОВЕРКА АВТОРИЗАЦИИ ПОЛЬЗОВАТЕЛЯ
 	app.get('/authenticate', function(req ,res){
