@@ -14,7 +14,7 @@ var flash    = require('connect-flash');
 
 
 
-require('./config/passport')(passport); // pass passport for configuration
+require('./utils/passport')(passport); // pass passport for configuration
 
 //
 

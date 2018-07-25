@@ -53,9 +53,9 @@
 				<span class="changer" onclick="openHider(this)">Изменить</span>
 
 				<form class="put-add column hidden" method="post" action="/" id="pass-form-change">
-					<input type="password" name="cur-pass" placeholder="Введите текущий пароль">
+					<input type="password" name="oldpassword" placeholder="Введите текущий пароль">
 					<input type="password" name="new-pass" placeholder="Введите новый пароль">
-					<input type="password" name="accept-pass" placeholder="Подтвердите пароль">
+					<input type="password" name="newpassword" placeholder="Подтвердите пароль">
 					<span class="alert"></span>
 					<div class="btn-wrap">
 						<input type="submit" name="change-password-btn" value="Сохранить" class="disabled-btn" id="btn-saver-pass" disabled>
@@ -70,9 +70,9 @@
 				<span id="email-span">sobaka@gmail.com</span>
 				<span class="changer" onclick="openHider(this)">Изменить</span>
 
-				<form class="put-add column hidden" method="post" action="" id="email-form-change">
+				<form class="put-add column hidden" method="post" action="/updatepassword" id="email-form-change">
 					<span>Ваш старый email : sobaka@gmail.com</span>
-					<input type="text" name="new-email" placeholder="Введите новый email">
+					<input type="text" name="newemail" placeholder="Введите новый email">
 					<div class="btn-wrap ">
 						<input type="submit" name="change-email-btn" value="Сохранить" class="disabled-btn" id="btn-saver-email" disabled>
 						<div class="cancel" onclick="cancelHider(this)">Отмена</div>
