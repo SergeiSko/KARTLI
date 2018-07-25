@@ -24,17 +24,21 @@
 
 	<div class="main-wrap column">
 		<div class="list-wrap column">
+			<h2>Счет</h2>
+			<div class="row">
+				<span>На вашем счету:</span>
+				<span id="profile-bank"></span>
+				<span class="changer">Пополнить</span>
+			</div>
+		</div>
+
+		<div class="list-wrap column">
 			<h2>Подробная информация</h2>
 			<form class="put-add column" method="post" action="" name="about-self">
 				<input type="text" name="name" placeholder="Введите свое имя">
 				<input type="text" name="surname" placeholder="Введите фамилию">
 				<input type="text" name="fathername" placeholder="Введите отчество">
 				<input type="text" name="phonenumber" placeholder="+7 (917) 222 22 22">
-				<div class="row">
-					<span>Счет:</span>
-					<span>0$</span>
-					<button type="button" name="button" class="cancel">Пополнить</button>
-				</div>
 				<div class="btn-wrap">
 					<input type="submit" name="saver" value="Сохранить" class="disabled-btn" disabled>
 				</div>
