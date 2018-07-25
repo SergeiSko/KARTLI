@@ -43,16 +43,17 @@ $(document).ready(function () {
 			url: '/signup',
 			type: 'POST',
 			data: data,
-			success: function (result){
-				if (result == "Такой логин уже существует") {
-					$('.pop-wrap input[type="text"]').addClass('alert-input');
-					$('form[name="sign-up"] .alert').text(result);
-				} else {
+			statusCode:{
+				200: function(){
 					$('.alert').css("color" , "green").text('Успешно!');
 					$('.pop-wrap input').removeClass('alert-input');
 					setTimeout(function (){
 						$(location).attr('href' , '/profile');
 					}, 1000);
+				},
+				400: function(){
+					$('.pop-wrap input[type="text"]').addClass('alert-input');
+					$('form[name="sign-up"] .alert').text("Такой логин уже существует!");
 				}
 			}
 		});
@@ -97,18 +98,20 @@ $(document).ready(function () {
 			url: '/login',
 			type: 'POST',
 			data: data,
-			success: function (result){
-				if (result == "Неправильный логин или пароль") {
-					$('.pop-wrap input[type="text"] , input[type="password"]').addClass('alert-input');
-					$('form[name="login"] .alert').text(result);
-				} else {
+			statusCode: {
+				200: function(){
 					$('.alert').css("color" , "green").text('Успешно!');
 					$('.pop-wrap input').removeClass('alert-input');
 					setTimeout(function (){
 						$(location).attr('href' , '/products');
 					}, 1000);
+				},
+				400: function(){
+					$('.pop-wrap input[type="text"] , input[type="password"]').addClass('alert-input');
+					$('form[name="login"] .alert').text("Неправильный логин или пароль!");
 				}
 			}
+
 		});
 
 		e.preventDefault();
