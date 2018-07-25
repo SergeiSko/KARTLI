@@ -1,3 +1,4 @@
+var cash;
 $(document).ready(function () {
 
 	if ($('div.black')) {
@@ -14,17 +15,20 @@ $(document).ready(function () {
 		});
 	}
 
-	if ($(location).attr('href') == 'http://localhost:3000/profile') {
+	if ($('div.black')) {
 		$.ajax({
 			url: '/userinfo',
 			type: 'GET',
 			success: function (result){
-				$('form[name="about-self"] input[name="name"]').attr('value' , result.name);
-				$('form[name="about-self"] input[name="surname"]').attr('value' , result.surname);
-				$('form[name="about-self"] input[name="fathername"]').attr('value' , result.fathername);
-				$('form[name="about-self"] input[name="phonenumber"]').attr('value' , result.mobile);
-				if (result.cash != null) $('.put-add .row').children().eq(1).text(result.cash + "$");
-				else $('.put-add .row').children().eq(1).text('0$');
+				if (result.cash != null) cash = result.cash;
+				else cash = 0;
+				if ($(location).attr('href') == 'http://localhost:3000/profile') {
+					$('form[name="about-self"] input[name="name"]').attr('value' , result.name);
+					$('form[name="about-self"] input[name="surname"]').attr('value' , result.surname);
+					$('form[name="about-self"] input[name="fathername"]').attr('value' , result.fathername);
+					$('form[name="about-self"] input[name="phonenumber"]').attr('value' , result.mobile);
+					$('#profile-bank').text(cash + "$")
+			  }
 			}
 		});
 	}
@@ -232,9 +236,9 @@ function LogOut() {
 function dropProfile(elem) {
 	$(elem).slideDown();
 	$(elem).css("display" , "flex");
+	$('#bank').text("Банк: " + cash + "$");
 }
 
 function hideProfile(elem) {
 		$(elem).slideUp();
-		console.log('hello');
 }

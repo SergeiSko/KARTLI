@@ -35,6 +35,11 @@
 	text-align: center;
 }
 
+.main .subtile {
+	align-self: center;
+	width: 50%;
+}
+
 .hover {
 	position: absolute;
 	background-color: #000;
@@ -164,6 +169,7 @@
 	cursor: pointer;
 	margin: 15px;
 	border-bottom: 2px solid transparent;
+	font-size: .9em;
 	transition-property: border-bottom;
 	transition-duration: .5s;
 	transition-timing-function: linear;
@@ -383,8 +389,7 @@
 }
 
 .list-wrap .row span {
-	padding: 10px 20px;
-	width: 200px;
+	padding: 10px 25px 10px 75px;
 	text-align: center;
 	color: #475359;
 	font-weight: bold;
@@ -418,7 +423,8 @@
 
 .profile span {
 	border-bottom: 1px solid #ccc;
-	padding: 5px 20PX;
+	padding: 5px 0;
+	text-align: center;
 }
 
 /* Profile */
@@ -439,27 +445,6 @@
 .put-add .row span {
 	padding: 0;
 	width: auto;
-}
-
-.put-add .row button {
-	background-color: transparent;
-	border-radius: 5px;
-	color: #33a0ff;
-	font-weight: bold;
-	border: 1px solid #33a0ff;
-	padding: 5px 10px;
-	cursor: pointer;
-	align-self: center;
-	transition-property: background-color , color;
-	transition-duration: .5s;
-	transition-timing-function: linear;
-	text-align: center;
-	font-size: .9em;
-}
-
-.put-add .row button:hover {
-	background-color: #33a0ff;
-	color: #fff;
 }
 
 .put-add input {
