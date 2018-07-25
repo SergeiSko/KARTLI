@@ -133,7 +133,7 @@ module.exports.searchTesk = function(start_city, finish_city, mass, price, resul
     port: 3306
   });
   connection.connect();
-  connection.query("SELECT company.name, route.km, car.mass, price_for_km*km \
+  connection.query("SELECT company.name, route.km, car.mass, price_for_km*km AS price \
   FROM (((((user_type JOIN users \
   ON user_type.user_type_id = users.user_type_id) \
   JOIN company ON users.user_id = company.user_id) \
@@ -143,15 +143,15 @@ module.exports.searchTesk = function(start_city, finish_city, mass, price, resul
   WHERE start_city = (SELECT city_id FROM city WHERE name='"+start_city+"') \
   AND finish_city = (SELECT city_id FROM city WHERE name='"+finish_city+"') \
   AND in_city = (SELECT city_id FROM city WHERE name='"+start_city+"') \
-  AND car.mass > "+mass+" \
-  AND "+price+" > \
+  AND car.mass >= "+mass+" \
+  AND "+price+" >= \
   (SELECT (price_for_km * (SELECT km AS price FROM route \
   WHERE start_city = (SELECT city_id FROM city WHERE name='"+start_city+"') \
   AND finish_city = (SELECT city_id FROM city WHERE name='"+finish_city+"'))) AS price \
   FROM `company` WHERE company_id = (SELECT company_id FROM company_route \
   WHERE route_id = (SELECT route_id FROM route \
   WHERE start_city = (SELECT city_id FROM city WHERE name='"+start_city+"') \
-  AND finish_city = (SELECT city_id FROM city WHERE name='"+start_city+"'))))",
+  AND finish_city = (SELECT city_id FROM city WHERE name='"+finish_city+"'))))",
   function(err, res){
      if(err) console.log(err);
      result.send(res);

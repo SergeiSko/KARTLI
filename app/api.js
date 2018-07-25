@@ -65,7 +65,7 @@ module.exports = function(app, passport){
 	});
 
   app.post('/searchTesk', function(req, res){
-         searchTesk(req.body.from, req.body.to, req.body.weight, req.body.prise,res );
+         searchTesk(req.body.from, req.body.to, req.body.weight, req.body.prise, res );
 
     });
     //start_city, finish_city, mass, price, res
