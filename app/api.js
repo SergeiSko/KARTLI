@@ -10,8 +10,10 @@ module.exports = function(app, passport){
 
   //АВТОРИЗАЦИЯ /
   	app.post('/login', passport.authenticate('local-login', {
-              successRedirect: true,
-              failureRedirect: true,
+              successRedirect: false,
+              failureRedirect: false,
+              successRequest : true, //200 SEND STATUS OK ДОБАВЛЕНО ВО ФРЕЙМВОРК ПАСПОРТА
+              failureRequest : true, //400 SEND STATUS ДОБАВЛЕНО ВО ФРЕЙМВОРК ПАСПОРТА
               failureFlash : false // allow flash messages
   		}),
           function(req, res) {
@@ -29,8 +31,10 @@ module.exports = function(app, passport){
 
   //РЕГИСТРАЦИЯ
   app.post('/signup', passport.authenticate('local-signup', {
-		successRedirect : true, // redirect to the secure profile section
-		failureRedirect : true, // redirect back to the signup page if there is an error
+    successRedirect: false,
+    failureRedirect: false,
+    successRequest : true, // OK 200 SEND STATUS ДОБАВЛЕНО ВО ФРЕЙМВОРК ПАСПОРТА
+    failureRequest : true, // 400 STATUS SEND ДОБАВЛЕНО ВО ФРЕЙМВОРК ПАСПОРТА
 		failureFlash : false // allow flash messages
 	}),
 	function(req, res){
