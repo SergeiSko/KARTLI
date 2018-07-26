@@ -65,16 +65,9 @@ module.exports = function(app, passport){
 
 		updateprofile(name, surname, fathername, phonenumber,1, username, res);
 	});
-  global.vol1 = "Kazan";
-  global.vol1 = "Moscow";
+
   //ПОИСК ПОСТАВЩИКОВ ПО НЕОМБХОДИМЫМ ПАРАМЕТРАМ
-  var mysql = require("mysql");
-  connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    port: 3306
-  });
+
   connection.connect()
   app.post('/searchTesk', function(req, res){
     var query = connection.query("SELECT city_id FROM city WHERE name='Kazan'", function(err, res){
@@ -105,7 +98,7 @@ app.post('/updatemail',_authcheck, function(req, res){
     var email = req.user.email;
     updatepassword(res,email, bodyoldpass, bodynewpass);
 
-})
+});
 		//ПРОВЕРКА АВТОРИЗАЦИИ ПОЛЬЗОВАТЕЛЯ
 	app.get('/authenticate', function(req ,res){
 		if(req.isAuthenticated()) res.send(true); else res.send(false);
