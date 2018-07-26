@@ -191,6 +191,38 @@ $(document).ready(function () {
 
 	});
 
+	$('div.option').click(function (){
+		$(this).parent().parent().children('input[type="text"]').attr('value' , $(this).text());
+		$(this).parent().parent().children('input[type="text"]').removeClass('select-alert');
+	});
+
+	$('form[name="search-filter"] input[type="button"]').click(function (){
+		var data = {
+			name: $('#select-name').val(),
+			type: $('#select-type').val(),
+			oblast: $('#select-oblast').val(),
+			color: $('#select-color').val()
+		};
+		var i = 0;
+		$.each(data, function (key , value){
+			if (value == '') {
+				$('#select-' + key).addClass('select-alert');
+				i++;
+			}
+		});
+		if (i == 0) {
+			$.ajax({
+				url: '/',
+				type: 'POST',
+				data: data,
+				success: function (result){
+					console.log(result);
+				}
+			});
+		}
+
+	});
+
 }); //onload closed
 
 function cancelHider(elem){
@@ -241,4 +273,14 @@ function dropProfile(elem) {
 
 function hideProfile(elem) {
 		$(elem).slideUp();
+}
+
+function selectOpen(elem) {
+	if ($(elem).children('.option-group').css("display") == "none")
+		$(elem).children('.option-group').slideDown();
+	else $(elem).children('.option-group').slideUp();
+}
+
+function selectClose(elem) {
+		$(elem).parent().children('.option-group').slideUp();
 }

@@ -294,7 +294,7 @@
 	text-shadow: none;
 }
 
-/* second page */
+/* Product list page */
 
 .second-title {
 	padding: 25px;
@@ -342,7 +342,7 @@
 	transform: scale(1.1);
 }
 
-.filter input[type="submit"] {
+.filter input[type="submit"] , .filter input[type="button"] {
 	border: 1px solid #475359;
 	border-radius: 5px;
 	padding: 10px 30px;
@@ -356,13 +356,73 @@
 	transition-timing-function: linear;
 }
 
-.filter input[type="submit"]:hover {
+.filter input[type="submit"]:hover , .filter input[type="button"]:hover {
 	background-color: #475359;
 	color: #fff;
 }
 
-.filter input[type="submit"]:active {
+.filter input[type="submit"]:active , .filter input[type="button"]:active {
 	transform: scale(.9);
+}
+
+/* select group */
+
+.select-group {
+	position: relative;
+	justify-content: space-between;
+	align-items: center;
+	width: 250px;
+	cursor: pointer;
+	font-size: .8em;
+	background-color: #fff;
+	font-weight: bold;
+}
+
+.filter label .select-group input[type="text"] {
+	padding: 10px;
+	width: 100%;
+}
+
+.filter label .select-group input[type="text"]:focus {
+	transform: none;
+	border: 1px solid #475359;
+}
+
+.default-value {
+	opacity: .8;
+}
+
+.filter label .select-group .select-alert {
+	border: 2px solid #e74c3c;
+}
+
+.option-group {
+	display: none;
+	position: absolute;
+	justify-content: center;
+	align-items: center;
+	padding: 10px 0;
+	width: 248px;
+	height: 100px;
+	overflow: scroll;
+	top: 30px;
+	border: 1px solid #475359;
+	border-radius: 5px;
+	border-top: none;
+	background-color: #fff;
+}
+
+.option-group .option {
+	width: 100%;
+	text-align: center;
+	padding: 5px 0;
+	margin: 5px 0;
+	border-radius: 100px;
+}
+
+.option-group .option:hover {
+	background-color: #475359;
+	color: #fff;
 }
 
 .list-wrap {

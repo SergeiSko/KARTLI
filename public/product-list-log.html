@@ -49,27 +49,63 @@
 		</form>
 	</div>
 
-	<h1 class="second-title">Предложния по перевозке</h1>
+	<h1 class="second-title">Список полимерной продукции</h1>
 
 	<div class="main-wrap column">
-		<form class="filter row" method="post">
+		<form class="filter row" method="post" name="search-filter">
 			<label>
-				<span>Откуда</span>
-				<input type="text" name="from" placeholder="Город">
+				<span>Название полимера</span>
+				<div class="select-group row" onclick="selectOpen(this)">
+					<input type="text" name="" id="select-name" placeholder="Выберите название" onblur="selectClose(this)">
+					<div class="option-group column">
+						<div class="option">Имя 1</div>
+						<div class="option">Имя 2</div>
+						<div class="option">Имя 2</div>
+						<div class="option">Имя 2</div>
+						<div class="option">Имя 2</div>
+					</div>
+				</div>
 			</label>
 			<label>
-				<span>Куда</span>
-				<input type="text" name="to" placeholder="Город">
+				<span>Тип полимера</span>
+				<div class="select-group row" onclick="selectOpen(this)">
+					<input type="text" name="" id="select-type" placeholder="Выберите название" onblur="selectClose(this)">
+					<div class="option-group column">
+						<div class="option">Имя 1</div>
+						<div class="option">Имя 2</div>
+						<div class="option">Имя 2</div>
+						<div class="option">Имя 2</div>
+						<div class="option">Имя 2</div>
+					</div>
+				</div>
 			</label>
 			<label>
-				<span>Грузоподъемность</span>
-				<input type="text" name="weight" placeholder="тонн">
+				<span>Область применения полимера</span>
+				<div class="select-group row" onclick="selectOpen(this)">
+					<input type="text" name="" id="select-oblast" placeholder="Выберите название" onblur="selectClose(this)">
+					<div class="option-group column">
+						<div class="option">Имя 1</div>
+						<div class="option">Имя 2</div>
+						<div class="option">Имя 2</div>
+						<div class="option">Имя 2</div>
+						<div class="option">Имя 2</div>
+					</div>
+				</div>
 			</label>
 			<label>
-				<span>Стоимость</span>
-				<input type="text" name="prise" placeholder="$">
+				<span>Цвет полимера</span>
+				<div class="select-group row" onclick="selectOpen(this)">
+					<input type="text" name="" id="select-color" placeholder="Выберите название" onblur="selectClose(this)">
+					<div class="option-group column">
+						<div class="option">Имя 1</div>
+						<div class="option">Имя 2</div>
+						<div class="option">Имя 2</div>
+						<div class="option">Имя 2</div>
+						<div class="option">Имя 2</div>
+					</div>
+				</div>
 			</label>
-			<input type="submit" name="search" value="Найти">
+			<input type="button" name="search" value="Найти">
 		</form>
 
 		<div class="list-wrap column">
