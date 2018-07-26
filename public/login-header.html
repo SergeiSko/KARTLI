@@ -1,0 +1,19 @@
+<div class="title column">
+  <a href="/products"><h2>LogicSySKartli</h2></a>
+  <span>Биржа полимеров</span>
+</div>
+
+<div class="number row">
+  <img src="images/phone-sec.png" width="30px">
+  <span>8 (800) 555 35 35</span>
+  <div class="profile-wrap column">
+    <a href="/profile" onmouseover="dropProfile('.profile')"><img src="images/profile.png" width="32px"></a>
+    <span onclick="dropProfile('.profile')">Личный кабинет</span>
+    <div class="profile column" onmouseleave="hideProfile('.profile')">
+        <span id="bank"></span>
+        <button>Настройки</button>
+        <button type="submit" onclick="LogOut()">Выход</button>
+    </div>
+  </div>
+  <img src="images/burger.png" id="opener" width="25px" onclick="openMenu()">
+</div>

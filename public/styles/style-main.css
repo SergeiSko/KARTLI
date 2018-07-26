@@ -35,6 +35,11 @@
 	text-align: center;
 }
 
+.main .subtile {
+	align-self: center;
+	width: 50%;
+}
+
 .hover {
 	position: absolute;
 	background-color: #000;
@@ -164,6 +169,7 @@
 	cursor: pointer;
 	margin: 15px;
 	border-bottom: 2px solid transparent;
+	font-size: .9em;
 	transition-property: border-bottom;
 	transition-duration: .5s;
 	transition-timing-function: linear;
@@ -273,8 +279,22 @@
 	transform: scale(.9);
 }
 
+.pop-wrap label {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	align-self: center;
+}
 
-/* second page */
+.pop-wrap label span {
+	color: #1B2631;
+	font-weight: bold;
+	font-size: 1.2em;
+	text-shadow: none;
+}
+
+/* Product list page */
 
 .second-title {
 	padding: 25px;
@@ -322,7 +342,7 @@
 	transform: scale(1.1);
 }
 
-.filter input[type="submit"] {
+.filter input[type="submit"] , .filter input[type="button"] {
 	border: 1px solid #475359;
 	border-radius: 5px;
 	padding: 10px 30px;
@@ -336,13 +356,73 @@
 	transition-timing-function: linear;
 }
 
-.filter input[type="submit"]:hover {
+.filter input[type="submit"]:hover , .filter input[type="button"]:hover {
 	background-color: #475359;
 	color: #fff;
 }
 
-.filter input[type="submit"]:active {
+.filter input[type="submit"]:active , .filter input[type="button"]:active {
 	transform: scale(.9);
+}
+
+/* select group */
+
+.select-group {
+	position: relative;
+	justify-content: space-between;
+	align-items: center;
+	width: 250px;
+	cursor: pointer;
+	font-size: .8em;
+	background-color: #fff;
+	font-weight: bold;
+}
+
+.filter label .select-group input[type="text"] {
+	padding: 10px;
+	width: 100%;
+}
+
+.filter label .select-group input[type="text"]:focus {
+	transform: none;
+	border: 1px solid #475359;
+}
+
+.default-value {
+	opacity: .8;
+}
+
+.filter label .select-group .select-alert {
+	border: 2px solid #e74c3c;
+}
+
+.option-group {
+	display: none;
+	position: absolute;
+	justify-content: center;
+	align-items: center;
+	padding: 10px 0;
+	width: 248px;
+	height: 100px;
+	overflow: scroll;
+	top: 30px;
+	border: 1px solid #475359;
+	border-radius: 5px;
+	border-top: none;
+	background-color: #fff;
+}
+
+.option-group .option {
+	width: 100%;
+	text-align: center;
+	padding: 5px 0;
+	margin: 5px 0;
+	border-radius: 100px;
+}
+
+.option-group .option:hover {
+	background-color: #475359;
+	color: #fff;
 }
 
 .list-wrap {
@@ -369,8 +449,7 @@
 }
 
 .list-wrap .row span {
-	padding: 10px 20px;
-	width: 200px;
+	padding: 10px 25px 10px 75px;
 	text-align: center;
 	color: #475359;
 	font-weight: bold;
@@ -388,7 +467,7 @@
 	position: absolute;
 	top: 65px;
 	background-color: #1B2631;
-	padding-bottom: 20px;
+	padding: 20px;
 	z-index: 2;
 	box-shadow: 2px 3px 3px rgba(0,0,0,.9);
 	border-radius: 5px;
@@ -404,7 +483,8 @@
 
 .profile span {
 	border-bottom: 1px solid #ccc;
-	padding: 5px 20PX;
+	padding: 5px 0;
+	text-align: center;
 }
 
 /* Profile */
@@ -414,6 +494,17 @@
 	align-items: center;
 	width: 100%;
 	padding: 25px 0;
+}
+
+.put-add .row {
+	align-self: center;
+	width: 80%;
+	border-bottom: none;
+}
+
+.put-add .row span {
+	padding: 0;
+	width: auto;
 }
 
 .put-add input {
@@ -429,7 +520,7 @@
 	font-size: .9em;
 }
 
-.put-add input[type="text"]:focus {
+.put-add input[type="text"]:focus , .put-add input[type="password"]:focus {
 	border-color: #33a0ff;
 	border-radius: 100px;
 }
@@ -469,7 +560,6 @@
 	padding: 15px 20px;
 	cursor: pointer;
 	align-self: center;
-	width: 25%;
 	transition-property: background-color , color;
 	transition-duration: .5s;
 	transition-timing-function: linear;

@@ -14,9 +14,9 @@ var flash    = require('connect-flash');
 
 
 
-require('./config/passport')(passport); // pass passport for configuration
+require('./utils/passport')(passport); // pass passport for configuration
 
-
+//
 
 // УСТАНОВКА EXPRESS
 app.use(morgan('dev')); //ВЫВОД В КОНСОЛЬ КАЖДОГО ЗАПРОСА ДЛЯ ОТЛАДКИ
@@ -38,7 +38,7 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-	app.use(express.static(__dirname + "/public")); //ПОДКЛЮЧЕНИЕ СТАТИЧЕСКИХ ФАЙЛОВ
+app.use(express.static(__dirname + "/public")); //ПОДКЛЮЧЕНИЕ СТАТИЧЕСКИХ ФАЙЛОВ
 
 require('./app/routes.js')(app, passport); // МОДУЛЬ МАРШРУТИЗАЦИИ
 require('./app/api.js')(app, passport); //МОДУЛЬ API

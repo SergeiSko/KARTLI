@@ -10,12 +10,16 @@ connection.query('CREATE DATABASE ' + dbconfig.database);
 
 connection.query('\
 CREATE TABLE `' + dbconfig.database + '`.`' + dbconfig.users_table + '` ( \
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
-    `username` VARCHAR(20) NOT NULL, \
-    `password` CHAR(60) NOT NULL, \
-        PRIMARY KEY (`id`), \
-    UNIQUE INDEX `id_UNIQUE` (`id` ASC), \
-    UNIQUE INDEX `username_UNIQUE` (`username` ASC) \
+  `userid` INT NOT NULL AUTO_INCREMENT , \
+`email` VARCHAR(45) NOT NULL , \
+`password` VARCHAR(60) NOT NULL , \
+`name` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL , \
+`surname` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL , \
+`fathername` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL , \
+`phonenumber` VARCHAR(15) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL , \
+`usertypeid` INT NOT NULL , \
+`cash` DOUBLE NOT NULL , \
+PRIMARY KEY (`userid`), INDEX `userid` (`userid`), UNIQUE (`email`)) ENGINE = MyISAM; \
 )');
 
 console.log('Success: Database Created!')

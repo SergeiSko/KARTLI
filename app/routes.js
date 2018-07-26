@@ -1,8 +1,6 @@
 // ./app/routes.js
 
 module.exports = function(app, passport) {
-
-
 //===================================
 //МАРШРУТЫ
 //===================================
@@ -20,7 +18,7 @@ app.get('/products', function(req, res){
 
 app.get('/', function(req, res){
 	if(req.isAuthenticated()){
-		res.sendfile('public/profile-company.html');
+		res.redirect('/profile')
 	}
 	else {
 		res.sendfile('public/home.html');
@@ -28,12 +26,10 @@ app.get('/', function(req, res){
 });
 
 
-
 }; //КОНЕЦ ЭКСПОРТА
 
 
-
-//  MIDDLEWARE ПРОВЕРКИ АВТОРИЗАЦИИ С CALLBACK
+//  MIDDLEWARE ПРОВЕРКИ АВТОРИЗАЦИИ С CALLBACK /
 function isLoggedIn(req, res, next) {
 
 	// ЕСЛИ ПОЛЬЗОВАТЕЛЬ АВТОРИЗОВАН

@@ -1,14 +1,19 @@
 module.exports = function(app, passport){
-  var updateprofile = require('../config/passport').SqlProfile;
-  var getUsername = require('../config/passport').getInfo;
+  var updateprofile = require('../utils/sql_util').updateProfile;
+  var getUsername = require('../utils/sql_util').getInfo;
+  var updatemail = require('../utils/sql_util').updateMail;
+  var updatepassword = require('../utils/sql_util').updatePassword;
+  var order = require('../utils/sql_util').order;
   //=======================================
   // API
   //========================================
 
-  //АВТОРИЗАЦИЯ
+  //АВТОРИЗАЦИЯ /
   	app.post('/login', passport.authenticate('local-login', {
-              successRedirect : '/products', // redirect to the secure profile section
-              failureRedirect : '/loginerror', // redirect back to the signup page if there is an error
+              successRedirect: false,
+              failureRedirect: false,
+              successRequest : true, //200 SEND STATUS OK ДОБАВЛЕНО ВО ФРЕЙМВОРК ПАСПОРТА
+              failureRequest : true, //400 SEND STATUS ДОБАВЛЕНО ВО ФРЕЙМВОРК ПАСПОРТА
               failureFlash : false // allow flash messages
   		}),
           function(req, res) {
@@ -24,14 +29,12 @@ module.exports = function(app, passport){
       });
 
 
-  		app.get('/loginerror', function(req, res){
-  			res.send('Неправильный логин или пароль');
-  		});
-
   //РЕГИСТРАЦИЯ
   app.post('/signup', passport.authenticate('local-signup', {
-		successRedirect : '/profile', // redirect to the secure profile section
-		failureRedirect : '/signuperror', // redirect back to the signup page if there is an error
+    successRedirect: false,
+    failureRedirect: false,
+    successRequest : true, // OK 200 SEND STATUS ДОБАВЛЕНО ВО ФРЕЙМВОРК ПАСПОРТА
+    failureRequest : true, // 400 STATUS SEND ДОБАВЛЕНО ВО ФРЕЙМВОРК ПАСПОРТА
 		failureFlash : false // allow flash messages
 	}),
 	function(req, res){
@@ -40,7 +43,7 @@ module.exports = function(app, passport){
 );
 
  app.get('/signuperror', function(req, res){
-	res.send("Такой логин уже существует");
+	res.end("Такой логин уже существует");
 });
 
 //ВЫХОД
@@ -50,31 +53,94 @@ module.exports = function(app, passport){
 	});
 
 //ОБНОВЛЕНИЕ ИНФОРМАЦИИ О ПОЛЬЗОВАТЕЛЯХ
-	app.post('/updateprofile', function(req, res){
+	app.post('/updateprofile',_authcheck, function(req, res){
 
-		var username = req.user.username;
+		var username = req.user.email;
 		var name = req.body.name;
-		var surname = req.body.surname;
+  	var surname = req.body.surname;
 		var fathername = req.body.fathername;
 		var phonenumber = req.body.phonenumber;
 
 		console.log('updateprofile STARTED FROM routes');
 
-		updateprofile(name, surname, fathername, phonenumber, username);
+		updateprofile(name, surname, fathername, phonenumber,1, username, res);
 	});
+  global.vol1 = "Kazan";
+  global.vol1 = "Moscow";
+  //ПОИСК ПОСТАВЩИКОВ ПО НЕОМБХОДИМЫМ ПАРАМЕТРАМ
+  var mysql = require("mysql");
+  connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    port: 3306
+  });
+  connection.connect()
+  app.post('/searchTesk', function(req, res){
+    var query = connection.query("SELECT city_id FROM city WHERE name='Kazan'", function(err, res){
 
+    });
+    //res.send(global.vol1);
+
+
+
+    //req.body.from--возвращает содержимое формы "откуда"
+    //res.send("Работает!!!");
+  });
+
+  //СМЕНА ПОЧТЫ
+app.post('/updatemail',_authcheck, function(req, res){
+  if(req.isAuthenticated()){
+      var oldmail = req.user.email;
+      var newmail = req.body.newemail;
+      updatemail(res, oldmail, newmail );
+  }
+});
+
+    //СМЕНА ПАРОЛЯ
+  app.post('/updatepassword',_authcheck, function(req, res){
+
+    var bodyoldpass = req.body.oldpassword;  //Старый пароль, который ввели на странице смены пароля
+    var bodynewpass = req.body.newpassword;
+    var email = req.user.email;
+    updatepassword(res,email, bodyoldpass, bodynewpass);
+
+})
 		//ПРОВЕРКА АВТОРИЗАЦИИ ПОЛЬЗОВАТЕЛЯ
 	app.get('/authenticate', function(req ,res){
 		if(req.isAuthenticated()) res.send(true); else res.send(false);
 	});
 
 //ПОЛУЧЕНИЕ ИМЕНИ, ФАМИЛИИ И НОМЕРА ТЕЛЕФОНА В JSON формате (name, surname, mobile)
-	app.get('/userinfo', function(req, res){
-		if(!req.user){
-			res.send('User not found');
-		} else {
-			getUsername(res, req.user.username);
-		}
+	app.get('/userinfo',_authcheck, function(req, res){
+
+			getUsername(res, req.user.email);
 	});
 
+  //Оформиление заказа
+  app.post('/order',_authcheck, function(req, res){
+    var product = {
+      name : req.body.productname,
+      price : req.body.price,
+      route : req.body.route,
+      company : req.body.company
+    };
+    //product { RoadId: , UserId(Клиент): , State: , CompanyId: ,price:  }
+    var client = req.body.buyer;
+    var seller = req.body.seller;
+    order(res, client, seller, product);
+    //res, clientlogin, sellerlogin, product)
+  });
 }
+
+//Middleware для проверки аутенфикации клиента
+function _authcheck(req, res, next){
+      if(req.isAuthenticated()){
+        return next();
+      }
+      else {
+        res.sendStatus(401);
+      }
+}
+// 401: Unauthorized
+//200 : OK
