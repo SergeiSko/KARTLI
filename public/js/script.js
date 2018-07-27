@@ -249,7 +249,7 @@ $(document).ready(function () {
 		});
 		if (i == 0) {
 			$.ajax({
-				url: '/',
+				url: '/search',
 				type: 'POST',
 				data: data,
 				success: function (result){

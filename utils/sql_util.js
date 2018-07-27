@@ -117,6 +117,25 @@ module.exports.order = function(res, clientlogin, sellerlogin, product){
    });
 }
 
+module.exports.searchTesk = function(res, polymerName, polymerType, polymerUsing, polymerColor){
+
+  var searchResults ;
+
+  var searchCompany = "SELECT Companies.CompanyName, Routes.StartCity, Routes.EndCity,Polymers.Capacity, Polymers.PolymerPrice \
+FROM (Companies INNER JOIN Routes ON Companies.CompanyId = Routes.CompanyId)  \
+INNER JOIN Polymers ON Companies.CompanyId = Polymers.CompanyId \
+WHERE Polymers.PolymerName= ? AND Polymers.PolymerType= ? AND Polymers.PolymerUsing= ? AND Polymers.Color = ?";
+
+
+//[polymerName, polymerType, polymerUsing, polymerColor]
+      connection.query(searchCompany,[polymerName, polymerType, polymerUsing, polymerColor], function(err, rows){
+          _checkError(err, res);
+          console.log(rows);
+         res.send(rows);
+        });
+  //      res.send(":C");
+}
+
 function _checkError(error, response){
   if(error){
     response.end("SQL not working. Please inform admins");

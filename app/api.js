@@ -4,6 +4,7 @@ module.exports = function(app, passport){
   var updatemail = require('../utils/sql_util').updateMail;
   var updatepassword = require('../utils/sql_util').updatePassword;
   var order = require('../utils/sql_util').order;
+  var search = require('../utils/sql_util').searchTesk;
   //=======================================
   // API
   //========================================
@@ -68,8 +69,14 @@ module.exports = function(app, passport){
 
   //ПОИСК ПОСТАВЩИКОВ ПО НЕОМБХОДИМЫМ ПАРАМЕТРАМ
 
-  app.post('/search', function(req,res){
-
+  app.post('/search', function(req, res){
+    var polymerName = req.body.name;
+    var polymerType = req.body.type;
+    var polymerUsing = req.body.oblast;
+    var polymerColor = req.body.color;
+    console.log(req.body);
+  //  res.send('k');
+    search(res, polymerName, polymerType, polymerUsing, polymerColor);
   });
     //res.send(global.vol1);
 
