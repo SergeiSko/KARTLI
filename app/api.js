@@ -68,18 +68,16 @@ module.exports = function(app, passport){
 
   //ПОИСК ПОСТАВЩИКОВ ПО НЕОМБХОДИМЫМ ПАРАМЕТРАМ
 
-  connection.connect()
-  app.post('/searchTesk', function(req, res){
-    var query = connection.query("SELECT city_id FROM city WHERE name='Kazan'", function(err, res){
+  app.post('/search', function(req,res){
 
-    });
+  });
     //res.send(global.vol1);
 
 
 
     //req.body.from--возвращает содержимое формы "откуда"
     //res.send("Работает!!!");
-  });
+
 
   //СМЕНА ПОЧТЫ
 app.post('/updatemail',_authcheck, function(req, res){
