@@ -67,7 +67,7 @@ module.exports = function(app, passport){
 		updateprofile(name, surname, fathername, phonenumber,1, username, res);
 	});
 
-  //ПОИСК ПОСТАВЩИКОВ ПО НЕОМБХОДИМЫМ ПАРАМЕТРАМ
+  //ПОИСК ПОСТАВЩИКОВ ПО 4 ПАРАМЕТРАМ: Название, Тип, Область применения, Цвет
 
   app.post('/search', function(req, res){
     var polymerName = req.body.name;
@@ -78,13 +78,6 @@ module.exports = function(app, passport){
   //  res.send('k');
     search(res, polymerName, polymerType, polymerUsing, polymerColor);
   });
-    //res.send(global.vol1);
-
-
-
-    //req.body.from--возвращает содержимое формы "откуда"
-    //res.send("Работает!!!");
-
 
   //СМЕНА ПОЧТЫ
 app.post('/updatemail',_authcheck, function(req, res){
