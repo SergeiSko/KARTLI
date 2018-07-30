@@ -32,7 +32,7 @@ app.use(bodyParser.json());
 
 // PASSPORT инициализация
 app.use(session({
-	secret: 'kartlikey', //СЕКРЕТНЫЙ КЛЮЧ ДЛЯ ШИФРОВАНИЯ ПАРОЛЕЙ
+	secret: 'kartlikey', //СЕКРЕТНЫЙ КЛЮЧ ДЛЯ ШИФРОВАНИЯ СЕССИЙ
 	store: sessionStore,
 	resave: true,
 	saveUninitialized: true
