@@ -258,7 +258,7 @@ $(document).ready(function () {
 					console.log(result);
 					for(var i=0; i<result.length; i++){
 						var row = "row" + i ;
-				$('div[id=productlist]').append('<div name ="' +row + '" >\
+				$('div[id=productlist]').append('<div class="row" name="' +row + '" >\
 				<span id=1> </span>\
 				<span id=2> </span>\
 				<span id=3> </span>\
