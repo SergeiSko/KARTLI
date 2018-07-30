@@ -9,7 +9,7 @@ connection.query('USE ' + dbconfig.database);  //ПРИВЯЗКА К дб
 module.exports.updateProfile = function(name, surname, fathername, phonenumber,usertype, username, res){
 
   	console.log('updateprofile STARTED FROM passport');
-  connection.query("UPDATE users SET name = ?, surname = ?, fathername = ?, phonenumber = ?, usertypeid = ? WHERE email = ?",[name, surname, fathername, phonenumber,usertype,username], function(err, rows){
+  connection.query("UPDATE users SET name = ?, surname = ?, fathername = ?, phonenumber = ?, WHERE email = ?",[name, surname, fathername, phonenumber,username], function(err, rows){
 		if(err){console.log(err);
       res.sendStatus(500);
     }

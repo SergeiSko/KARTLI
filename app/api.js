@@ -61,9 +61,10 @@ module.exports = function(app, passport){
 		var fathername = req.body.fathername;
 		var phonenumber = req.body.phonenumber;
 
+
 		console.log('updateprofile STARTED FROM routes');
 
-		updateprofile(name, surname, fathername, phonenumber,1, username, res);
+		updateprofile(name, surname, fathername, phonenumber, username, res);
 	});
 
   //ПОИСК ПОСТАВЩИКОВ ПО 4 ПАРАМЕТРАМ: Название, Тип, Область применения, Цвет
