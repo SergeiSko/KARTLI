@@ -130,7 +130,7 @@ function _authcheck(req, res, next){
         return next();
       }
       else {
-        res.sendStatus(401);
+        res.status(401).send({message: 'User unauthorized'});
       }
 }
 // 401: Unauthorized

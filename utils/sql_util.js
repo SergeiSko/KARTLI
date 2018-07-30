@@ -10,7 +10,7 @@ module.exports.updateProfile = function(name, surname, fathername, phonenumber, 
 
   	console.log('updateprofile STARTED FROM passport');
   connection.query("UPDATE users SET name = ?, surname = ?, fathername = ?, phonenumber = ? WHERE email = ?",[name, surname, fathername, phonenumber,username], function(err, rows){
-		_checkError(err, res, {success: 'Profile successful updated'});
+		_checkError(err, res, {message: 'Profile successful updated'});
     //res.status(200).send({success: 'Profile successful updated'});
 		});
 
@@ -44,13 +44,13 @@ module.exports.updateMail = function(res,oldmail, newemail){
 
     if(rows.length){
     //  res.send('Email is already taken');
-      res.status(400).send({error: 'Email is already taken'});
+      res.status(400).send({message: 'Email is already taken'});
 //      console.log(rows);
     }
     else{
       var newmailquery = "UPDATE users SET email = ? WHERE email = ?";
       connection.query(newmailquery,[newemail, oldmail], function(err, rows){
-        _checkError(err, res,{success: 'Mail successful updated'});
+        _checkError(err, res,{message: 'Mail successful updated'});
     //    res.send('Success');
   //  res.status(200).send({success: 'Mail successful updated'});
       });
@@ -73,7 +73,7 @@ module.exports.updatePassword = function(res, email, oldpassword, newpassword){
         var oldpassquery = "UPDATE users SET password = ? WHERE email =?";
 
         connection.query(oldpassquery, [newpass, email], function(err, rows){
-          _checkError(err, res,{success: 'Password successful updated'} );
+          _checkError(err, res,{message: 'Password successful updated'} );
 
         //  res.send('Success');
 
@@ -81,7 +81,7 @@ module.exports.updatePassword = function(res, email, oldpassword, newpassword){
         });
       } else {
       //  res.send('password incorrect');
-      res.status(401).send({error: 'Password incorrect'});
+      res.status(401).send({message: 'Password incorrect'});
       }
     }
   });
@@ -109,7 +109,7 @@ module.exports.order = function(res, clientlogin, sellerlogin, product){
               });
 
               connection.query(insertOrder, [product.RoadId, product.UserId, product.State, product.CompanyId, product.price], function(err, rows){ //Добавление заказа в бд
-                _checkError(err, res,{success: 'Заказ успешно оформлен'});
+                _checkError(err, res,{message: 'Заказ успешно оформлен'});
 
               });
 
@@ -138,7 +138,7 @@ WHERE Polymers.PolymerName= ? AND Polymers.PolymerType= ? AND Polymers.PolymerUs
 
 function _checkError(error, response,successMessage){
   if(error){
-    response.status(500).send({error:'SQL not working. Please inform admins'});
+    response.status(500).send({message:'SQL not working. Please inform admins'});
   //  response.end("SQL not working. Please inform admins");
     console.log(error);
   } else if(successMessage){

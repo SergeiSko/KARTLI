@@ -10,13 +10,22 @@ var morgan = require('morgan');
 var app      = express();
 var port     = process.env.PORT || 3000;
 var passport = require('passport');
-var flash    = require('connect-flash');
+var MySQLStore = require('express-mysql-session')(session);
 
 
 
 require('./utils/passport')(passport); // pass passport for configuration
 
 //
+var options = {
+	host: 'localhost',
+	port: '3306',
+	user: 'root',
+	password: '',
+	database: 'kartlibeta'
+};
+
+var sessionStore = new MySQLStore(options);
 
 // УСТАНОВКА EXPRESS
 app.use(morgan('dev')); //ВЫВОД В КОНСОЛЬ КАЖДОГО ЗАПРОСА ДЛЯ ОТЛАДКИ
@@ -26,17 +35,18 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.set('view engine', 'ejs'); // ДВИЖОК ДЛЯ EJS-a
+//app.set('view engine', 'ejs'); // ДВИЖОК ДЛЯ EJS-a
 
 // PASSPORT инициализация
 app.use(session({
 	secret: 'kartlikey', //СЕКРЕТНЫЙ КЛЮЧ ДЛЯ ШИФРОВАНИЯ ПАРОЛЕЙ
+	store: sessionStore,
 	resave: true,
 	saveUninitialized: true
  } ));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
+//app.use(flash()); // use connect-flash for flash messages stored in session
 
 app.use(express.static(__dirname + "/public")); //ПОДКЛЮЧЕНИЕ СТАТИЧЕСКИХ ФАЙЛОВ
 

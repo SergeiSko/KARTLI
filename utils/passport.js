@@ -14,12 +14,12 @@ connection.query('USE ' + dbconfig.database);  //ПРИВЯЗКА К дб
 
 module.exports = function(passport) {
 
-    //МЕТОД СОЗДАНИЯ СЕССИИ ПОЛЬЗОВАТЕЛЯ
+    //MIDDLEWARE СОЗДАНИЯ СЕССИИ ПОЛЬЗОВАТЕЛЯ
     passport.serializeUser(function(user, done) {
         done(null, user.id);
     });
 
-    //МЕТОД УДАЛЕНИЯ СЕССИИ ПОЛЬЗОВАТЕЛЯ
+    //MIDDLEWARE УДАЛЕНИЯ СЕССИИ ПОЛЬЗОВАТЕЛЯ
     passport.deserializeUser(function(id, done) {
         connection.query("SELECT * FROM users WHERE id = ? ",[id], function(err, rows){
             done(err, rows[0]);
