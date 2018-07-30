@@ -6,21 +6,20 @@ var connection = mysql.createConnection(dbconfig.connection);
 connection.query('USE ' + dbconfig.database);  //ПРИВЯЗКА К дб
 
 //ФУНКЦИЯ ОБНОВЛЕНИЯ ПРОФИЛЯ
-module.exports.updateProfile = function(name, surname, fathername, phonenumber,usertype, username, res){
+module.exports.updateProfile = function(name, surname, fathername, phonenumber, username, res){
 
   	console.log('updateprofile STARTED FROM passport');
-  connection.query("UPDATE users SET name = ?, surname = ?, fathername = ?, phonenumber = ?, WHERE email = ?",[name, surname, fathername, phonenumber,username], function(err, rows){
-		if(err){console.log(err);
-      res.sendStatus(500);
-    }
+  connection.query("UPDATE users SET name = ?, surname = ?, fathername = ?, phonenumber = ? WHERE email = ?",[name, surname, fathername, phonenumber,username], function(err, rows){
+		_checkError(err, res, {success: 'Profile successful updated'});
+    //res.status(200).send({success: 'Profile successful updated'});
 		});
-    res.sendStatus(200);
+
 };
 
 module.exports.getInfo = function(res, email){
   var query = "SELECT * FROM users INNER JOIN usertype ON usertype.usertypeid = users.usertypeid WHERE email = ?";
   connection.query(query, [email], function(err, rows){
-    _checkError(err, res);
+
     if(rows) {
       var userinfo = {
         name : rows[0].name,
@@ -30,7 +29,8 @@ module.exports.getInfo = function(res, email){
         usertype : rows[0].usertype,
         cash : rows[0].cash
       }
-      res.send(userinfo);
+      _checkError(err, res,userinfo);
+    //  res.send(userinfo);
     }
   });
 }
@@ -43,15 +43,15 @@ module.exports.updateMail = function(res,oldmail, newemail){
 
     if(rows.length){
     //  res.send('Email is already taken');
-      res.sendStatus(400);
+      res.status(400).send({error: 'Email is already taken'});
 //      console.log(rows);
     }
     else{
       var newmailquery = "UPDATE users SET email = ? WHERE email = ?";
       connection.query(newmailquery,[newemail, oldmail], function(err, rows){
-        _checkError(err, res);
+        _checkError(err, res,{success: 'Mail successful updated'});
     //    res.send('Success');
-    res.sendStatus(200);
+  //  res.status(200).send({success: 'Mail successful updated'});
       });
     }
   });
@@ -72,14 +72,15 @@ module.exports.updatePassword = function(res, email, oldpassword, newpassword){
         var oldpassquery = "UPDATE users SET password = ? WHERE email =?";
 
         connection.query(oldpassquery, [newpass, email], function(err, rows){
-          _checkError(err, res);
+          _checkError(err, res,{success: 'Password successful updated'} );
 
         //  res.send('Success');
-        res.sendStatus(200);
+
+
         });
       } else {
       //  res.send('password incorrect');
-      res.sendStatus(401);
+      res.status(401).send({error: 'Password incorrect'});
       }
     }
   });
@@ -91,6 +92,7 @@ module.exports.order = function(res, clientlogin, sellerlogin, product){
   var clientCashDecrease = "UPDATE users SET cash = cash - ? WHERE email = ?";
   var sellerCashIncrease = "UPDATE users SET cash = cash + ? WHERE email = ?";
   var insertOrder = "INSERT INTO orders (RoadId, id, State, CompanyId, Price) VALUES(?, ?, ?, ?, ?) ";
+
 
    connection.query(getClientCash, [clientlogin], function(err, rows){
      _checkError(err, res);
@@ -106,20 +108,18 @@ module.exports.order = function(res, clientlogin, sellerlogin, product){
               });
 
               connection.query(insertOrder, [product.RoadId, product.UserId, product.State, product.CompanyId, product.price], function(err, rows){ //Добавление заказа в бд
-                _checkError(err, res);
-                res.send("Заказ успешно оформлен");
+                _checkError(err, res,{success: 'Заказ успешно оформлен'});
+
               });
 
           } else {
 
-            res.send('Недостаточно средств !');
+            res.send({error : 'Недостаточно средств !'});
           }
    });
 }
 
 module.exports.searchTesk = function(res, polymerName, polymerType, polymerUsing, polymerColor){
-
-  var searchResults ;
 
   var searchCompany = "SELECT Companies.CompanyName, Routes.StartCity, Routes.EndCity,Polymers.Capacity, Polymers.PolymerPrice \
 FROM (Companies INNER JOIN Routes ON Companies.CompanyId = Routes.CompanyId)  \
@@ -129,16 +129,18 @@ WHERE Polymers.PolymerName= ? AND Polymers.PolymerType= ? AND Polymers.PolymerUs
 
 //[polymerName, polymerType, polymerUsing, polymerColor]
       connection.query(searchCompany,[polymerName, polymerType, polymerUsing, polymerColor], function(err, rows){
-          _checkError(err, res);
+          _checkError(err, res, rows);
           console.log(rows);
-         res.send(rows);
         });
   //      res.send(":C");
 }
 
-function _checkError(error, response){
+function _checkError(error, response,successMessage){
   if(error){
-    response.end("SQL not working. Please inform admins");
+    response.status(500).send({error:'SQL not working. Please inform admins'});
+  //  response.end("SQL not working. Please inform admins");
     console.log(error);
+  } else if(successMessage){
+    response.status(200).send(successMessage);
   }
 }
