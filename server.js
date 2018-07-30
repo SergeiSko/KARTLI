@@ -11,21 +11,14 @@ var app      = express();
 var port     = process.env.PORT || 3000;
 var passport = require('passport');
 var MySQLStore = require('express-mysql-session')(session);
+var dbconfig = require('./utils/database');
 
 
 
 require('./utils/passport')(passport); // pass passport for configuration
 
-//
-var options = {
-	host: 'localhost',
-	port: '3306',
-	user: 'root',
-	password: '',
-	database: 'kartlibeta'
-};
-
-var sessionStore = new MySQLStore(options);
+//СОХРАНЕНИЕ СЕССИЙ В БД
+var sessionStore = new MySQLStore(dbconfig.connection);
 
 // УСТАНОВКА EXPRESS
 app.use(morgan('dev')); //ВЫВОД В КОНСОЛЬ КАЖДОГО ЗАПРОСА ДЛЯ ОТЛАДКИ

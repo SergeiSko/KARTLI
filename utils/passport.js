@@ -64,7 +64,6 @@ module.exports = function(passport) {
         })
     );
 
-
     //ПАСПОРТ СТРАТЕГИЯ НА АВТОРИЗАЦИЮ ПОЛЬЗОВАТЕЛЯ
     passport.use(
         'local-login',

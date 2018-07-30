@@ -3,6 +3,7 @@ var bcrypt = require('bcrypt-nodejs'); //ДЛЯ ШИФРОВАНИЯ ПАРОЛ�
 var dbconfig = require('./database'); //КОНФИГ С ПАРАМЕТРАМИ БД В JSON
 var connection = mysql.createConnection(dbconfig.connection);
 //
+
 connection.query('USE ' + dbconfig.database);  //ПРИВЯЗКА К дб
 
 //ФУНКЦИЯ ОБНОВЛЕНИЯ ПРОФИЛЯ
