@@ -40,12 +40,11 @@ module.exports = function(app, passport){
 	}),
 	function(req, res){
 		req.session.cookie.maxAge = 1000 * 60 * 3;
+    console.log(req);
 	}
 );
 
- app.get('/signuperror', function(req, res){
-	res.end("Такой логин уже существует");
-});
+
 
 //ВЫХОД
 	app.get('/logout', function(req, res) {
