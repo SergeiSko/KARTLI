@@ -46,6 +46,9 @@ app.use(express.static(__dirname + "/public")); //ПОДКЛЮЧЕНИЕ СТА�
 require('./app/routes.js')(app, passport); // МОДУЛЬ МАРШРУТИЗАЦИИ
 require('./app/api.js')(app, passport); //МОДУЛЬ API
 
+app.get('*', function(req, res){
+res.send('PAGE NOT FOUND');
+});
 // ЗАПУСК СЕРВЕРА ======================================================================
 app.listen(port);
 console.log('Сервер слушает порт ' + port);

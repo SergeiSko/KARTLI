@@ -9,6 +9,7 @@ module.exports = function(app, passport){
   // API
   //========================================
 
+
   //АВТОРИЗАЦИЯ /
   	app.post('/login', passport.authenticate('local-login', {
               successRedirect: false,
@@ -122,6 +123,7 @@ app.post('/updatemail',_authcheck, function(req, res){
     order(res, client, seller, product);
     //res, clientlogin, sellerlogin, product)
   });
+
 }
 
 //Middleware для проверки аутенфикации клиента
