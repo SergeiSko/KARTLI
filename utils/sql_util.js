@@ -27,7 +27,8 @@ module.exports.getInfo = function(res, email){
         fathername : rows[0].fathername,
         mobile : rows[0].phonenumber,
         usertype : rows[0].usertype,
-        cash : rows[0].cash
+        cash : rows[0].cash,
+        email : email
       }
       _checkError(err, res,userinfo);
     //  res.send(userinfo);

@@ -28,6 +28,8 @@ $(document).ready(function () {
 					$('form[name="about-self"] input[name="fathername"]').attr('value' , result.fathername);
 					$('form[name="about-self"] input[name="phonenumber"]').attr('value' , result.mobile);
 					$('#profile-bank').text(cash + "$")
+					$('div[id=row-s] span[id=email-span]').text(result.email);
+					$('form[id=email-form-change] span[id=emailold-span]').text("Ваш старый email: " + result.email);
 			  }
 			}
 		});
