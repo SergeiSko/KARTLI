@@ -256,7 +256,20 @@ $(document).ready(function () {
 				data: data,
 				success: function (result){
 					console.log(result);
-				}
+					for(var i=0; i<result.length; i++){
+						var row = "row" + i ;
+				$('div[id=productlist]').append('<div name ="' +row + '" >\
+				<span id=1> </span>\
+				<span id=2> </span>\
+				<span id=3> </span>\
+				<span id=4> </span>\
+				</div>');
+				$('div[name = '+row+ '] span[id = 1]').text(result[i].CompanyName);
+				$('div[name = '+row+ '] span[id = 2]').text(result[i].StartCity +" - "+ result[i].EndCity);
+				$('div[name = '+row+ '] span[id = 3]').text(result[i].Capacity);
+				$('div[name = '+row+ '] span[id = 4]').text(result[i].PolymerPrice);
+			}
+		}
 			});
 		}
 
