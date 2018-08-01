@@ -259,7 +259,7 @@ $(document).ready(function () {
 	});
 
 	$('div.option').click(function (){
-		$(this).parent().parent().children('input[type="text"]').attr('value' , $(this).text());
+		$(this).parent().parent().children('input[type="text"]').val($(this).text());
 		$(this).parent().parent().children('input[type="text"]').removeClass('select-alert');
 	});
 
