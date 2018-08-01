@@ -8,10 +8,37 @@ $(document).ready(function () {
 				success: function (result){
 					if (result == true) {
 						$('div.black').load('login-header.html');
+						$('.buy').text('Приобрести');
 					} else {
 						$('div.black').load('header.html');
+						$('.buy').text('Оформить заявку');
 					}
 				}
+		});
+	}
+	if ($('.buy')) {
+		$('.buy').click(function (){
+			var data = $(this).parent().attr('id');
+			if ($(this).text() == "Приобрести") {
+				$.ajax({
+					url: '/',
+					type: 'POST',
+					data: data,
+					success: function(result) {
+						$('#buyer').slideDown();
+						$('.hover').css("opacity" , "0.8");
+						$('.hover').css("z-index" , "2");
+						$('#buyer').children('h2').text(result);
+						setTimeout(function (){
+							$('#buyer').slideUp();
+							$('.hover').css("opacity" , "0.1");
+							$('.hover').css("z-index" , "0");
+						}, 1000);
+					}
+				});
+			} else {
+				console.log(data);
+			}
 		});
 	}
 
@@ -173,6 +200,7 @@ $(document).ready(function () {
 		$('body').removeClass('fixed');
 		$('#auto').slideUp();
 		$('#reg').slideUp();
+		$('#buyer').slideUp();
 		$('.hover').css("opacity" , "0.1");
 		$('.hover').css("z-index" , "0");
 		$('.pop-wrap input').removeClass('alert-input');
@@ -242,37 +270,25 @@ $(document).ready(function () {
 			oblast: $('#select-oblast').val(),
 			color: $('#select-color').val()
 		};
-		var i = 0;
-		$.each(data, function (key , value){
-			if (value == '') {
-				$('#select-' + key).addClass('select-alert');
-				i++;
+		$.ajax({
+			url: '/search',
+			type: 'POST',
+			data: data,
+			success: function (result){
+				console.log(result);
 			}
 		});
-		if (i == 0) {
-			$.ajax({
-				url: '/search',
-				type: 'POST',
-				data: data,
-				success: function (result){
-					console.log(result);
-					for(var i=0; i<result.length; i++){
-						var row = "row" + i ;
-				$('div[id=productlist]').append('<div class="row" name="' +row + '" >\
-				<span id=1> </span>\
-				<span id=2> </span>\
-				<span id=3> </span>\
-				<span id=4> </span>\
-				</div>');
-				$('div[name = '+row+ '] span[id = 1]').text(result[i].CompanyName);
-				$('div[name = '+row+ '] span[id = 2]').text(result[i].StartCity +" - "+ result[i].EndCity);
-				$('div[name = '+row+ '] span[id = 3]').text(result[i].Capacity);
-				$('div[name = '+row+ '] span[id = 4]').text(result[i].PolymerPrice);
-			}
-		}
-			});
-		}
 
+	});
+
+	$('.polimers-row').mouseover(function (){
+		$(this).children('span').css("color" , "#fff");
+		$('.buy').show();
+	});
+
+	$('.polimers-row').mouseleave(function (){
+		$(this).children('span').css("color" , "#475359");
+		$('.buy').hide();
 	});
 
 }); //onload closed
