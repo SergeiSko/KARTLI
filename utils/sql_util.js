@@ -153,6 +153,15 @@ module.exports.ordersView = function(res, email){
   });
 }
 
+module.exports.catalog = function(res, table){
+
+  var catalogQuery = "SELECT * FROM " + table;
+  connection.query(catalogQuery, function(err, rows){
+    _checkError(err, res, rows);
+
+  });
+}
+
 function _checkError(error, response,successMessage){
   if(error){
     response.status(500).send({message:'SQL not working. Please inform admins'});

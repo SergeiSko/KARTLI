@@ -6,6 +6,7 @@ module.exports = function(app, passport){
   var order = require('../utils/sql_util').order;
   var search = require('../utils/sql_util').searchTesk;
   var ordersView = require('../utils/sql_util').ordersView;
+  var catalog = require('../utils/sql_util').catalog;
   //=======================================
   // API
   //========================================
@@ -121,12 +122,21 @@ app.post('/updatemail',_authcheck, function(req, res){
       order(res, order);
       //res, clientlogin, sellerlogin, product)
     }
-
   });
 
   app.get('/ordersView',_authcheck, function(req, res){
       ordersView(res, req.user.email);
+  });
 
+  app.get('/catalog/polymers/:type', function(req, res){
+    var name = req.params.type;
+    switch (name) {
+      case 'polymermarks': catalog(res, name);  break;
+      case 'polymertypes': catalog(res, name); break;
+      case 'polymerusing': catalog(res, name); break;
+      case 'colors': catalog(res, name); break;
+      default: res.status(400).send('unknown request');
+    }
   });
 
 }
