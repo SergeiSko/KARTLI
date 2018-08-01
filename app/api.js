@@ -5,6 +5,7 @@ module.exports = function(app, passport){
   var updatepassword = require('../utils/sql_util').updatePassword;
   var order = require('../utils/sql_util').order;
   var search = require('../utils/sql_util').searchTesk;
+  var ordersView = require('../utils/sql_util').ordersView;
   //=======================================
   // API
   //========================================
@@ -44,8 +45,6 @@ module.exports = function(app, passport){
     console.log(req);
 	}
 );
-
-
 
 //ВЫХОД
 	app.get('/logout', function(req, res) {
@@ -110,18 +109,24 @@ app.post('/updatemail',_authcheck, function(req, res){
 	});
 
   //Оформиление заказа
-  app.post('/order',_authcheck, function(req, res){
-    var product = {
-      name : req.body.productname,
-      price : req.body.price,
-      route : req.body.route,
-      company : req.body.company
-    };
-    //product { RoadId: , UserId(Клиент): , State: , CompanyId: ,price:  }
-    var client = req.body.buyer;
-    var seller = req.body.seller;
-    order(res, client, seller, product);
-    //res, clientlogin, sellerlogin, product)
+  app.post('/order', function(req, res){
+    if(req.isAuthenticated()){
+      var order = {
+        polymerId : req.body.polymerId,
+        date : Date.now(),
+        client : req.user.email
+      };
+      //product { RoadId: , UserId(Клиент): , State: , CompanyId: ,price:  }
+      //order: polymerId, date, client
+      order(res, order);
+      //res, clientlogin, sellerlogin, product)
+    }
+
+  });
+
+  app.get('/ordersView',_authcheck, function(req, res){
+      ordersView(res, req.user.email);
+
   });
 
 }

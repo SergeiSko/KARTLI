@@ -49,13 +49,13 @@ module.exports = function(passport) {
                     var newUserMysql = {
                         username: username,
                         password: bcrypt.hashSync(password, null, null), // use the generateHash function in our user model
-                        usertypid: req.body.typer
+                //        usertypid: req.body.typer
                     };
                     //SQL ЗАПРОС НА ВСТАВКУ ПОЛЬЗОВАТЕЛЯ В БД
-                    var insertQuery = "INSERT INTO users ( email, password, usertypeid ) values (?,?,?)";
+                    var insertQuery = "INSERT INTO users ( email, password ) values (?,?)";
                     console.log(newUserMysql);
                     //ВЫПОЛНЕНИЕ SQL ЗАПРОСА
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.password, newUserMysql.usertypid],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.passwordrtypid],function(err, rows) {
                         newUserMysql.id = rows.insertId;
                         return done(null, newUserMysql);
                     });

@@ -88,28 +88,36 @@ module.exports.updatePassword = function(res, email, oldpassword, newpassword){
   });
 }
 
-module.exports.order = function(res, clientlogin, sellerlogin, product){
+module.exports.order = function(res, order){
 
-  var getClientCash = "SELECT cash FROM users WHERE = email?";
+  //order: polymerId, date, client
+  var getClientCash = "SELECT cash, id FROM users WHERE email=?";
   var clientCashDecrease = "UPDATE users SET cash = cash - ? WHERE email = ?";
-  var sellerCashIncrease = "UPDATE users SET cash = cash + ? WHERE email = ?";
-  var insertOrder = "INSERT INTO orders (RoadId, id, State, CompanyId, Price) VALUES(?, ?, ?, ?, ?) ";
+  var sellerCashIncrease = "UPDATE users SET cash = cash + ? WHERE email = admin";
+  var getPolymerInfo = "SELECT CompanyId, PolymerPrice FROM Polymers WHERE PolymerId = ?";
+  var insertOrder = "INSERT INTO orders (PolymerId, ClientId, CompanyId, PurchaseDate, Price) VALUES(?, ?, ?, ?, ?) ";
+  var UserId;
 
-
-   connection.query(getClientCash, [clientlogin], function(err, rows){
+   connection.query(getClientCash, [order.client], function(err, rows){
      _checkError(err, res);
 
           if(rows[0].cash>product.price){
-              connection.query(clientCashDecrease, [product.price, clientlogin], function(err, rows){  //Снимаем деньги с покупателя
+              connection.query(clientCashDecrease, [order.price, order.client], function(err, rows){  //Снимаем деньги с покупателя
                 _checkError(err, res);
-
+                order.UserId = rows[0].id;
               });
 
-              connection.query(sellerCashIncrease, [product.price, sellerlogin], function(err, rows){ //добавляем деньги поставщику
+              connection.query(sellerCashIncrease, [order.price], function(err, rows){ //добавляем деньги админу
                 _checkError(err, res);
               });
 
-              connection.query(insertOrder, [product.RoadId, product.UserId, product.State, product.CompanyId, product.price], function(err, rows){ //Добавление заказа в бд
+              connection.query(getPolymerInfo, [order.polymerId], function(err, rows){
+                _checkError(err, res);
+                order.Price = rows[0].PolymerPrice;
+                order.CompanyId = rows[0].CompanyId;
+              });
+
+              connection.query(insertOrder, [order.polymerId, order.UserId, order.CompanyId,order.date, order.Price], function(err, rows){ //Добавление заказа в бд
                 _checkError(err, res,{message: 'Заказ успешно оформлен'});
 
               });
@@ -123,9 +131,8 @@ module.exports.order = function(res, clientlogin, sellerlogin, product){
 
 module.exports.searchTesk = function(res, polymerName, polymerType, polymerUsing, polymerColor){
 
-  var searchCompany = "SELECT Companies.CompanyName, Routes.StartCity, Routes.EndCity,Polymers.Capacity, Polymers.PolymerPrice \
-FROM (Companies INNER JOIN Routes ON Companies.CompanyId = Routes.CompanyId)  \
-INNER JOIN Polymers ON Companies.CompanyId = Polymers.CompanyId \
+  var searchCompany = "SELECT Companies.CompanyName, Polymers.PolymerName, Polymers.Capacity, Polymers.PolymerPrice, Polymers.Color, Polymers.PolymerId\
+FROM  (INNER JOIN Polymers ON Companies.CompanyId = Polymers.CompanyId) \
 WHERE Polymers.PolymerName= ? AND Polymers.PolymerType= ? AND Polymers.PolymerUsing= ? AND Polymers.Color = ?";
 
 
@@ -135,6 +142,15 @@ WHERE Polymers.PolymerName= ? AND Polymers.PolymerType= ? AND Polymers.PolymerUs
           console.log(rows);
         });
   //      res.send(":C");
+}
+
+module.exports.ordersView = function(res, email){
+
+  var ordersQuery = "SELECT * FROM(orders INNER JOIN users ON orders.ClientId = users.id) WHERE users.email=?";
+  connection.query(ordersQuery,[email],function(err, rows){
+      _checkError(err, res, rows);
+
+  });
 }
 
 function _checkError(error, response,successMessage){
