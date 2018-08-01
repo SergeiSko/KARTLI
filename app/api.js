@@ -131,10 +131,10 @@ app.post('/updatemail',_authcheck, function(req, res){
   app.get('/catalog/polymers/:type', function(req, res){
     var name = req.params.type;
     switch (name) {
-      case 'polymermarks': catalog(res, name);  break;
-      case 'polymertypes': catalog(res, name); break;
-      case 'polymerusing': catalog(res, name); break;
-      case 'colors': catalog(res, name); break;
+      case 'marks': catalog(res, 'polymermarks');  break;
+      case 'types': catalog(res, 'polymertypes'); break;
+      case 'using': catalog(res, 'polymerusing'); break;
+      case 'colors': catalog(res, 'colors'); break;
       default: res.status(400).send('unknown request');
     }
   });
