@@ -238,11 +238,12 @@
 .buyer-class {
 	border-radius: 5px;
 	padding: 50px;
-	box-shadow: 5px 5px 5px rgba(0,0,0,.8);
+	box-shadow: 5px 5px 5px rgba(0,0,0,.8	);
 }
 
 .pop-wrap h2 {
 	padding: 10px 0;
+	text-align: center;
 }
 
 .pop-wrap form {
@@ -266,9 +267,9 @@
 }
 
 .pop-wrap input[type="submit"] {
-	border: 2px solid #5DADE2;
+	border: 2px solid #27ae60;
 	background-color: transparent;
-	color: #5DADE2;
+	color: #27ae60;
 	cursor: pointer;
 	font-weight: bold;
 	transition-property: background-color, color;
@@ -277,7 +278,7 @@
 }
 
 .pop-wrap input[type="submit"]:hover {
-	background-color: #5DADE2;
+	background-color: #27ae60;
 	color: #fff;
 }
 
@@ -413,7 +414,8 @@ form .alert {
 	align-items: center;
 	padding: 10px 0;
 	width: 248px;
-	height: 100px;
+	height: 125px;
+	z-index: 5;
 	overflow: scroll;
 	top: 30px;
 	border: 1px solid #475359;
@@ -567,8 +569,8 @@ form .alert {
 .put-add input[type="submit"] {
 	background-color: transparent;
 	border-radius: 5px;
-	color: #33a0ff;
-	border-color: #33a0ff;
+	color: #27ae60;
+	border-color: #27ae60;
 	cursor: pointer;
 	align-self: center;
 	width: 25%;
@@ -576,7 +578,7 @@ form .alert {
 }
 
 .put-add input[type="submit"]:hover	 {
-	background-color: #33a0ff;
+	background-color: #27ae60;
 	color: #fff;
 }
 
