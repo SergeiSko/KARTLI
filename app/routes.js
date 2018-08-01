@@ -18,12 +18,13 @@ app.get('/products', function(req, res){
 
 app.get('/', function(req, res){
 	if(req.isAuthenticated()){
-		res.sendfile('public/profile-company.html');
+		res.redirect('/profile')
 	}
 	else {
 		res.sendfile('public/home.html');
 	}
 });
+
 
 
 }; //КОНЕЦ ЭКСПОРТА

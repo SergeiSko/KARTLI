@@ -10,15 +10,16 @@ var connection = mysql.createConnection(dbconfig.connection);
 //
 connection.query('USE ' + dbconfig.database);  //ПРИВЯЗКА К дб
 
-//ЭКСПОРТИРУЕМ ДЛЯ ИСПОЛЬЗОВАНИЯ В ДРУГИХ МОДУЛЯХ
+
+
 module.exports = function(passport) {
 
-    //МЕТОД СОЗДАНИЯ СЕССИИ ПОЛЬЗОВАТЕЛЯ
+    //MIDDLEWARE СОЗДАНИЯ СЕССИИ ПОЛЬЗОВАТЕЛЯ
     passport.serializeUser(function(user, done) {
         done(null, user.id);
     });
 
-    //МЕТОД УДАЛЕНИЯ СЕССИИ ПОЛЬЗОВАТЕЛЯ
+    //MIDDLEWARE УДАЛЕНИЯ СЕССИИ ПОЛЬЗОВАТЕЛЯ
     passport.deserializeUser(function(id, done) {
         connection.query("SELECT * FROM users WHERE id = ? ",[id], function(err, rows){
             done(err, rows[0]);
@@ -47,13 +48,14 @@ module.exports = function(passport) {
                     // create the user
                     var newUserMysql = {
                         username: username,
-                        password: bcrypt.hashSync(password, null, null)  // use the generateHash function in our user model
+                        password: bcrypt.hashSync(password, null, null), // use the generateHash function in our user model
+                        usertypid: req.body.typer
                     };
                     //SQL ЗАПРОС НА ВСТАВКУ ПОЛЬЗОВАТЕЛЯ В БД
-                    var insertQuery = "INSERT INTO users ( email, password, usertypeid ) values (?,?,1)";
-
+                    var insertQuery = "INSERT INTO users ( email, password, usertypeid ) values (?,?,?)";
+                    console.log(newUserMysql);
                     //ВЫПОЛНЕНИЕ SQL ЗАПРОСА
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.password],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.password, newUserMysql.usertypid],function(err, rows) {
                         newUserMysql.id = rows.insertId;
                         return done(null, newUserMysql);
                     });
@@ -61,7 +63,6 @@ module.exports = function(passport) {
             });
         })
     );
-
 
     //ПАСПОРТ СТРАТЕГИЯ НА АВТОРИЗАЦИЮ ПОЛЬЗОВАТЕЛЯ
     passport.use(

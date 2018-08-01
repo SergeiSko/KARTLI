@@ -4,9 +4,11 @@ module.exports = function(app, passport){
   var updatemail = require('../utils/sql_util').updateMail;
   var updatepassword = require('../utils/sql_util').updatePassword;
   var order = require('../utils/sql_util').order;
+  var search = require('../utils/sql_util').searchTesk;
   //=======================================
   // API
   //========================================
+
 
   //АВТОРИЗАЦИЯ /
   	app.post('/login', passport.authenticate('local-login', {
@@ -19,7 +21,7 @@ module.exports = function(app, passport){
           function(req, res) {
               console.log("hello");
 
-              if (req.body.remember) {
+              if (req.body.remember=="true") {
                 req.session.cookie.maxAge = 1000 * 60 * 3;
               } else {
                 req.session.cookie.expires = false;
@@ -39,12 +41,11 @@ module.exports = function(app, passport){
 	}),
 	function(req, res){
 		req.session.cookie.maxAge = 1000 * 60 * 3;
+    console.log(req);
 	}
 );
 
- app.get('/signuperror', function(req, res){
-	res.end("Такой логин уже существует");
-});
+
 
 //ВЫХОД
 	app.get('/logout', function(req, res) {
@@ -61,10 +62,23 @@ module.exports = function(app, passport){
 		var fathername = req.body.fathername;
 		var phonenumber = req.body.phonenumber;
 
+
 		console.log('updateprofile STARTED FROM routes');
 
-		updateprofile(name, surname, fathername, phonenumber,1, username);
+		updateprofile(name, surname, fathername, phonenumber, username, res);
 	});
+
+  //ПОИСК ПОСТАВЩИКОВ ПО 4 ПАРАМЕТРАМ: Название, Тип, Область применения, Цвет
+
+  app.post('/search', function(req, res){
+    var polymerName = req.body.name;
+    var polymerType = req.body.type;
+    var polymerUsing = req.body.oblast;
+    var polymerColor = req.body.color;
+    console.log(req.body);
+  //  res.send('k');
+    search(res, polymerName, polymerType, polymerUsing, polymerColor);
+  });
 
   //СМЕНА ПОЧТЫ
 app.post('/updatemail',_authcheck, function(req, res){
@@ -83,7 +97,7 @@ app.post('/updatemail',_authcheck, function(req, res){
     var email = req.user.email;
     updatepassword(res,email, bodyoldpass, bodynewpass);
 
-})
+});
 		//ПРОВЕРКА АВТОРИЗАЦИИ ПОЛЬЗОВАТЕЛЯ
 	app.get('/authenticate', function(req ,res){
 		if(req.isAuthenticated()) res.send(true); else res.send(false);
@@ -109,6 +123,7 @@ app.post('/updatemail',_authcheck, function(req, res){
     order(res, client, seller, product);
     //res, clientlogin, sellerlogin, product)
   });
+
 }
 
 //Middleware для проверки аутенфикации клиента
@@ -117,7 +132,7 @@ function _authcheck(req, res, next){
         return next();
       }
       else {
-        res.sendStatus(401);
+        res.status(401).send({message: 'User unauthorized'});
       }
 }
 // 401: Unauthorized

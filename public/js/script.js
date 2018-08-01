@@ -28,6 +28,8 @@ $(document).ready(function () {
 					$('form[name="about-self"] input[name="fathername"]').attr('value' , result.fathername);
 					$('form[name="about-self"] input[name="phonenumber"]').attr('value' , result.mobile);
 					$('#profile-bank').text(cash + "$")
+					$('div[id=row-s] span[id=email-span]').text(result.email);
+					$('form[id=email-form-change] span[id=emailold-span]').text("Ваш старый email: " + result.email);
 			  }
 			}
 		});
@@ -68,8 +70,19 @@ $(document).ready(function () {
 			url: '/updatepassword',
 			type: 'POST',
 			data: data,
-			success: function (result) {
-				console.log(result);
+			statusCode:{
+				200: function(){
+					$('#pass-form-change .alert').text('Успешно!').css("color" , "green");
+					setTimeout(function(){
+							$('#pass-form-change .alert').text('');
+					}, 4000);
+				},
+				401: function(){
+					$('#pass-form-change .alert').text('Неправильный пароль!').css("color" , "red");
+					setTimeout(function(){
+							$('#pass-form-change .alert').text('');
+					}, 4000);
+				}
 			}
 		});
 
@@ -83,9 +96,21 @@ $(document).ready(function () {
 			url: '/updatemail',
 			type: 'POST',
 			data: data,
-			success: function (result) {
-				console.log(result);
+			statusCode: {
+				200: function () {
+
+					$('#email-form-change .alert').text('Успешно!').css("color" , "green");
+					setTimeout(function(){
+							$('#email-form-change .alert').text('');
+					}, 4000);
+			},
+			400: function(){
+				$('#email-form-change .alert').text('Такая почта уже занята!').css("color" , "red");
+				setTimeout(function(){
+						$('#email-form-change .alert').text('');
+				}, 4000);
 			}
+		}
 		});
 
 		e.preventDefault();
@@ -124,8 +149,19 @@ $(document).ready(function () {
 			url: '/updateprofile',
 			type: 'POST',
 			data: data,
-			success: function (result){
-				$('form[name="about-self" .alert]').text('Успешно!').css("color" , "green");
+			statusCode:{
+					200:function (){
+	 				$('form[name="about-self"] .alert').text('Успешно!').css("color" , "green");
+					setTimeout(function(){
+						$('form[name="about-self"] .alert').text('');
+					}, 3000)
+				},
+					400: function (){
+	 				$('form[name="about-self"] .alert').text('Ошибка!').css("color" , "red");
+					setTimeout(function(){
+						$('form[name="about-self"] .alert').text('');
+					},3000)
+	 				}
 				}
 		});
 
@@ -215,12 +251,25 @@ $(document).ready(function () {
 		});
 		if (i == 0) {
 			$.ajax({
-				url: '/',
+				url: '/search',
 				type: 'POST',
 				data: data,
 				success: function (result){
 					console.log(result);
-				}
+					for(var i=0; i<result.length; i++){
+						var row = "row" + i ;
+				$('div[id=productlist]').append('<div class="row" name="' +row + '" >\
+				<span id=1> </span>\
+				<span id=2> </span>\
+				<span id=3> </span>\
+				<span id=4> </span>\
+				</div>');
+				$('div[name = '+row+ '] span[id = 1]').text(result[i].CompanyName);
+				$('div[name = '+row+ '] span[id = 2]').text(result[i].StartCity +" - "+ result[i].EndCity);
+				$('div[name = '+row+ '] span[id = 3]').text(result[i].Capacity);
+				$('div[name = '+row+ '] span[id = 4]').text(result[i].PolymerPrice);
+			}
+		}
 			});
 		}
 
