@@ -169,7 +169,7 @@
 	cursor: pointer;
 	margin: 15px;
 	border-bottom: 2px solid transparent;
-	font-size: .9em;
+	font-size: .8em;
 	transition-property: border-bottom;
 	transition-duration: .5s;
 	transition-timing-function: linear;
@@ -429,13 +429,12 @@ form .alert {
 	justify-content: center;
 	align-items: center;
 	padding: 10px 0;
-	width: 248px;
+	width: 99%;
 	height: 125px;
 	z-index: 5;
 	overflow: scroll;
 	top: 30px;
 	border: 1px solid #475359;
-	border-radius: 5px;
 	border-top: none;
 	background-color: #fff;
 }

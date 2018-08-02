@@ -1,4 +1,4 @@
-var $cash, $button_buy, $polymerId;
+var $cash, $button_buy, $polymerId, $admin;
 $(document).ready(function () {
 
 	if ($('div.black')) {
@@ -24,6 +24,8 @@ $(document).ready(function () {
 			success: function (result){
 				if (result.cash != null) $cash = result.cash;
 				else $cash = 0;
+				if (result.email == 'admin') $admin = true;
+				else $admin = false;
 				if ($(location).attr('href') == 'http://localhost:3000/profile') {
 					$('form[name="about-self"] input[name="name"]').attr('value' , result.name);
 					$('form[name="about-self"] input[name="surname"]').attr('value' , result.surname);
@@ -92,12 +94,12 @@ $(document).ready(function () {
 	});
 
 	if ($('#admin')) {
-		console.log('asd');
 		$.ajax({
-			url: '/control',
-			type: 'POST',
+			url: '/getprocent',
+			type: 'GET',
 			success: function (result){
-				$('#admin input[type="text"]').val(result.discount);
+				$('#admin input[type="text"]').val(result[0].discount);
+				console.log(result);
 			}
 		});
 	}
@@ -109,9 +111,10 @@ $(document).ready(function () {
 		$.ajax({
 			url: '/control',
 			type: 'POST',
+			data: data,
 			scucess: function(result) {
-				$('.alert').text(result.message);
-				$('#admin input[type="text"]').val(result.discount);
+				$('.alert').text(result[0].message);
+				$('#admin input[type="text"]').val(result[0].discount);
 			}
 		});
 
@@ -341,7 +344,7 @@ $(document).ready(function () {
 			success: function(result) {
 				console.log(result);
 				$.each(result , function (index){
-					$('#history').append('<div class="row"> <span>'+result[index].mark+'</span> <span>'+result[index].company+'</span> <span>'+result[index].Price+'</span> <span>'+result[index].date+'</span>	</div>');
+					$('#history').append('<div class="row"> <span>'+result[index].mark+'</span> <span>'+result[index].company+'</span> <span>'+result[index].Price+'</span> <span>'+Date(result[index].date)+'</span>	</div>');
 				});
 			}
 		});
@@ -462,4 +465,9 @@ function ajaxSelect(name) {
 			});
 		}
 	});
+}
+
+function adminHref() {
+	if ($admin) $(location).attr('href' , 'http://localhost:3000/control');
+	else $(location).attr('href' , 'http://localhost:3000/profile');
 }
