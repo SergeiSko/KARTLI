@@ -91,6 +91,33 @@ $(document).ready(function () {
 		e.preventDefault();
 	});
 
+	if ($('#admin')) {
+		console.log('asd');
+		$.ajax({
+			url: '/control',
+			type: 'POST',
+			success: function (result){
+				$('#admin input[type="text"]').val(result.discount);
+			}
+		});
+	}
+
+	$('#admin').submit(function (e){
+		var data = $(this).serialize();
+		console.log(data);
+
+		$.ajax({
+			url: '/control',
+			type: 'POST',
+			scucess: function(result) {
+				$('.alert').text(result.message);
+				$('#admin input[type="text"]').val(result.discount);
+			}
+		});
+
+		e.preventDefault();
+	});
+
 	$('#email-form-change').submit(function(e){
 		var data = $(this).serialize();
 
@@ -336,6 +363,7 @@ function buyFunc(elem) {
 				$('.hover').css("opacity" , "0.8");
 				$('.hover').css("z-index" , "2");
 				$('#buyer').children('h2').text(result.message);
+				$cash = result.cash;
 				setTimeout(function (){
 					$('#buyer').slideUp();
 					$('.hover').css("opacity" , "0.1");
