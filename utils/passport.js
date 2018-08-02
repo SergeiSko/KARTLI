@@ -52,10 +52,10 @@ module.exports = function(passport) {
                       //  usertypid: req.body.typer
                     };
                     //SQL ЗАПРОС НА ВСТАВКУ ПОЛЬЗОВАТЕЛЯ В БД
-                    var insertQuery = "INSERT INTO users ( email, password ) values (?,?)";
+                    var insertQuery = "INSERT INTO users ( email, password, cash ) values (?,?,?)";
                     console.log(newUserMysql);
                     //ВЫПОЛНЕНИЕ SQL ЗАПРОСА
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.password],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.password, 0],function(err, rows) {
                       console.log(rows);
                         newUserMysql.id = rows.insertId;
                         return done(null, newUserMysql);

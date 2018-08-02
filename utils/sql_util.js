@@ -123,7 +123,7 @@ module.exports.order = function(res, order){
 
           } else {
 
-            res.send({error : 'Недостаточно средств !'});
+            res.send({message : 'Недостаточно средств !'});
           }
    });
 }
@@ -137,7 +137,7 @@ module.exports.searchTesk = function(res,polymer){
   if(polymer.color) if(params.length) params += " AND Polymers.Color = " + polymer.color; else params +=" Polymers.Color = " + polymer.color;
 
   if(params.length) params = "WHERE " + params;
-  var searchquery = "SELECT polymers.PolymerPrice, polymerMarks.elemval AS Mark, \
+  var searchquery = "SELECT polymers.PolymerId, polymers.PolymerPrice, polymerMarks.elemval AS Mark, \
    polymerTypes.elemval AS Type, polymerUsing.elemval AS Usings , \
     Colors.elemval AS Color, Companies.CompanyName \
     FROM Companies INNER JOIN (PolymerUsing INNER JOIN (PolymerTypes INNER JOIN \
