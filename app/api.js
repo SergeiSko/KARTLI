@@ -9,6 +9,7 @@ module.exports = function(app, passport){
   var catalog = require('../utils/sql_util').catalog;
   var statementAdd = require('../utils/sql_util').statement;
   var discountControl = require('../utils/sql_util').discountControl;
+  var getProcent = require('../utils/sql_util').getProcent;
   //=======================================
   // API
   //========================================
@@ -166,14 +167,19 @@ app.post('/updatemail',_authcheck, function(req, res){
     }
   });
 
+  app.get('/getprocent', function(req, res){
+    getProcent(res);
+  });
+
+
   app.post('/control',_authcheck, function(req, res){
-    if(req.body){
+
       if(req.user.email = "admin"){
         discountControl(res, req.body.procent);
       } else {
         res.status(401).send('Permission denied');
       }
-    } else discountControl(res);
+
   });
 
 
