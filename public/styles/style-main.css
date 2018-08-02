@@ -41,11 +41,11 @@
 }
 
 .hover {
-	position: absolute;
+	position: fixed;
 	background-color: #000;
 	opacity: 0;
 	width: 100%;
-	height: 660px;
+	height: 100%;
 	z-index: 0;
 	transition: opacity .5s linear;
 }
@@ -224,7 +224,7 @@
 
 .pop-wrap {
 	display: none;
-	position: absolute;
+	position: fixed;
 	align-self: center;
 	margin-top: 10%;
 	justify-content: space-around;
