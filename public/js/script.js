@@ -263,49 +263,63 @@ $(document).ready(function () {
 		ajaxSelect('using');
 		ajaxSelect('types');
 		ajaxSelect('marks');
+		$.ajax({
+			url: '/search',
+			type: 'POST',
+			success: function(result) {
+				polymersList(result);
+			}
+		});
 	}
 
 	$('form[name="search-filter"] input[type="button"]').click(function (){
 		var data = {
-			name: $('#select-name').val(),
-			type: $('#select-type').val(),
-			oblast: $('#select-oblast').val(),
-			color: $('#select-color').val()
+			name: $('input[name="polymerName"]').attr('id'),
+			type: $('input[name="polymerType"]').attr('id'),
+			oblast: $('input[name="polymerUsing"]').attr('id'),
+			color: $('input[name="polymerColor"]').attr('id')
 		};
 		$.ajax({
 			url: '/search',
 			type: 'POST',
 			data: data,
-			success: function (result){
-				console.log(result);
+			success: function(result) {
+				polymersList(result);
 			}
 		});
 
 	});
 
-	$('.polimers-row').mouseover(function (){
-		$(this).children('span').css("color" , "#fff");
-		$('.buy').show();
-	});
-
-	$('.polimers-row').mouseleave(function (){
-		$(this).children('span').css("color" , "#475359");
-		$('.buy').hide();
+	$('.closer').click(function (){
+		$(this).parent().children('input').val('');
+		$(this).parent().children('input').attr('id' , null);
+		$(this).parent().children('input').blur();
 	});
 
 }); //onload closed
 
+function polymersList(result) {
+	$('#product_list').children().not('#title-row').remove();
+	var i = 0;
+	$.each(result , function (index){
+		i++;
+			$('#product_list').append(
+				'<div class="row polimers-row" name="' + i + '"><span>'+result[index].Mark+'</span> <span>'+result[index].CompanyName+'</span> <span>'+result[index].PolymerPrice+'</span> <span>'+result[index].Usings+'</span> <span>'+result[index].Color+'</span> <button type="button" name="button" class="buy">Приобрести</button></div>');
+	});
+}
+
 function selectChange(elem) {
 	$(elem).parent().parent().children('input[type="text"]').val($(elem).text());
+	$(elem).parent().parent().children('input[type="text"]').attr('id' , $(elem).attr('id'));
 }
 
 function cancelHider(elem){
 	$(elem).parent().parent().removeClass("flex");
-	$(elem).parent().parent().parent().children("span").removeClass("hidden");
+	$(elem).parent().parent().parent().children("span").show();
 };
 
 function openHider(elem) {
-	$(elem).parent().children('span').addClass('hidden');
+	$(elem).parent().children('span').hide();
 	$(elem).parent().children('form').addClass('flex');
 };
 
@@ -350,9 +364,9 @@ function hideProfile(elem) {
 }
 
 function selectOpen(elem) {
-	if ($(elem).children('.option-group').css("display") == "none")
-		$(elem).children('.option-group').slideDown();
-	else $(elem).children('.option-group').slideUp();
+	if ($(elem).parent().children('.option-group').css("display") == "none")
+		$(elem).parent().children('.option-group').slideDown();
+	else $(elem).parent().children('.option-group').slideUp();
 }
 
 function selectClose(elem) {
@@ -366,7 +380,7 @@ function ajaxSelect(name) {
 		success: function(result) {
 			console.log(result);
 			$.each(result , function (index){
-				$('#' + name).append('<div class="option" id="' + result[index].elemId + '" onclick="selectChange(this)">' + result[index].elemVal + '</div>');
+				$('#' + name).append('<div class="option" id="' + result[index].elemid + '" onclick="selectChange(this)">' + result[index].elemval + '</div>');
 			});
 		}
 	});

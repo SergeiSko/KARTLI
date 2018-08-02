@@ -49,57 +49,61 @@
 
 		<form class="filter row" method="post" name="search-filter">
 
-			<label>
+			<div class="label">
 				<span>Марка полимера</span>
-				<div class="select-group row" onclick="selectOpen(this)">
-					<input type="text" name="polymerName" id="select-name" placeholder="Выберите марку" onblur="selectClose(this)">
+				<div class="select-group row">
+					<input type="text" name="polymerName" placeholder="Выберите марку" onblur="selectClose(this)" onclick="selectOpen(this)">
+					<div class="closer">
+						X
+					</div>
 					<div class="option-group column" id="marks">
 					</div>
 				</div>
-			</label>
-			<label>
+			</div>
+			<div class="label">
 				<span>Тип полимера</span>
-				<div class="select-group row" onclick="selectOpen(this)">
-					<input type="text" name="polymerType" id="select-type" placeholder="Выберите тип" onblur="selectClose(this)">
+				<div class="select-group row">
+					<input type="text" name="polymerType" placeholder="Выберите тип" onblur="selectClose(this)" onclick="selectOpen(this)">
+					<div class="closer">
+						X
+					</div>
 					<div class="option-group column" id="types">
 					</div>
 				</div>
-			</label>
-			<label>
+			</div>
+			<div class="label">
 				<span>Область применения полимера</span>
-				<div class="select-group row" onclick="selectOpen(this)">
-					<input type="text" name="polymerUsing" id="select-oblast" placeholder="Выберите область применения" onblur="selectClose(this)">
+				<div class="select-group row">
+					<input type="text" name="polymerUsing" placeholder="Выберите область применения" onblur="selectClose(this)" onclick="selectOpen(this)">
+					<div class="closer">
+						X
+					</div>
 					<div class="option-group column" id="using">
 					</div>
 				</div>
-			</label>
-			<label>
+			</div>
+			<div class="label">
 				<span>Цвет полимера</span>
-				<div class="select-group row" onclick="selectOpen(this)">
-					<input type="text" name="polymerColor" id="select-color" placeholder="Выберите цвет" onblur="selectClose(this)">
+				<div class="select-group row">
+					<input type="text" name="polymerColor" placeholder="Выберите цвет" onblur="selectClose(this)" onclick="selectOpen(this)">
+					<div class="closer">
+						X
+					</div>
 					<div class="option-group column" id="colors">
 
 					</div>
 				</div>
-			</label>
+			</div>
 			<input type="button" name="search" value="Найти">
 		</form>
 
-		<div class="list-wrap column"id =productlist  >
-			<div class="row" >
+		<div class="list-wrap column" id="product_list">
+			<div class="row" id="title-row">
 				<span>Марка полимера</span>
 				<span>Поставщик полимера</span>
 				<span>Цена полимера</span>
 				<span>Область применения полимера</span>
 				<span>Цвет полимера</span>
-			</div>
-			<div class="row polimers-row">
-				<span>Марка полимера</span>
-				<span>Поставщик полимера</span>
-				<span>Цена полимера</span>
-				<span>Область применения полимера</span>
-				<span>Цвет полимера</span>
-				<button type="button" name="button" class="buy">Приобрести</button>
 			</div>
 		</div>
 	</div>
