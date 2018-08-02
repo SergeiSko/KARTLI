@@ -258,10 +258,12 @@ $(document).ready(function () {
 
 	});
 
-	$('div.option').click(function (){
-		$(this).parent().parent().children('input[type="text"]').val($(this).text());
-		$(this).parent().parent().children('input[type="text"]').removeClass('select-alert');
-	});
+	if ($('.select-group')) {
+		ajaxSelect('colors');
+		ajaxSelect('using');
+		ajaxSelect('types');
+		ajaxSelect('marks');
+	}
 
 	$('form[name="search-filter"] input[type="button"]').click(function (){
 		var data = {
@@ -292,6 +294,10 @@ $(document).ready(function () {
 	});
 
 }); //onload closed
+
+function selectChange(elem) {
+	$(elem).parent().parent().children('input[type="text"]').val($(elem).text());
+}
 
 function cancelHider(elem){
 	$(elem).parent().parent().removeClass("flex");
@@ -351,4 +357,17 @@ function selectOpen(elem) {
 
 function selectClose(elem) {
 		$(elem).parent().children('.option-group').slideUp();
+}
+
+function ajaxSelect(name) {
+	$.ajax({
+		url: '/catalog/polymers/' + name,
+		type: 'GET',
+		success: function(result) {
+			console.log(result);
+			$.each(result , function (index){
+				$('#' + name).append('<div class="option" id="' + result[index].elemId + '" onclick="selectChange(this)">' + result[index].elemVal + '</div>');
+			});
+		}
+	});
 }
