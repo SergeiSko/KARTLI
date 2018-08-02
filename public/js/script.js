@@ -1,4 +1,4 @@
-var cash;
+var $cash, $button_buy;
 $(document).ready(function () {
 
 	if ($('div.black')) {
@@ -8,10 +8,10 @@ $(document).ready(function () {
 				success: function (result){
 					if (result == true) {
 						$('div.black').load('login-header.html');
-						$('.buy').text('Приобрести');
+						$button_buy = 'Приобрести';
 					} else {
 						$('div.black').load('header.html');
-						$('.buy').text('Оформить заявку');
+						$button_buy = 'Оформить заявку';
 					}
 				}
 		});
@@ -22,14 +22,14 @@ $(document).ready(function () {
 			url: '/userinfo',
 			type: 'GET',
 			success: function (result){
-				if (result.cash != null) cash = result.cash;
-				else cash = 0;
+				if (result.cash != null) $cash = result.cash;
+				else $cash = 0;
 				if ($(location).attr('href') == 'http://localhost:3000/profile') {
 					$('form[name="about-self"] input[name="name"]').attr('value' , result.name);
 					$('form[name="about-self"] input[name="surname"]').attr('value' , result.surname);
 					$('form[name="about-self"] input[name="fathername"]').attr('value' , result.fathername);
 					$('form[name="about-self"] input[name="phonenumber"]').attr('value' , result.mobile);
-					$('#profile-bank').text(cash + "$")
+					$('#profile-bank').text($cash + "$")
 					$('div[id=row-s] span[id=email-span]').text(result.email);
 					$('form[id=email-form-change] span[id=emailold-span]').text("Ваш старый email: " + result.email);
 			  }
@@ -175,6 +175,7 @@ $(document).ready(function () {
 		$('body').removeClass('fixed');
 		$('#auto').slideUp();
 		$('#reg').slideUp();
+		$('#buyer_guest').slideUp();
 		$('#buyer').slideUp();
 		$('.hover').css("opacity" , "0.1");
 		$('.hover').css("z-index" , "0");
@@ -271,10 +272,37 @@ $(document).ready(function () {
 		$(this).parent().children('input').blur();
 	});
 
+	$('input[name="send_guest"]').click(function(){
+		var data = {
+			polymerId: polymerId,
+			name: $('input[name="guest_name"]'),
+			surname: $('input[name="guest_surname"]'),
+			fathername: $('input[name="guest_fathername"]'),
+			phonenumber: $('input[name="guest_phone"]')
+		}
+
+		$.ajax({
+			url: '/order',
+			type: 'POST',
+			data: data,
+			success: function(result) {
+				$(this).parent().parent().slideUp();
+				$('#buyer').slideDown();
+				$('#buyer').children('h2').text(result.message);
+				setTimeout(function (){
+					$('#buyer').slideUp();
+					$('.hover').css("opacity" , "0.1");
+					$('.hover').css("z-index" , "0");
+				}, 2000);
+			}
+		});
+	});
+
 }); //onload closed
 
+var polymerId;
+
 function buyFunc(elem) {
-	console.log('asd');
 	var data = {
 		polymerId: $(elem).parent().attr('name')
 	}
@@ -296,7 +324,10 @@ function buyFunc(elem) {
 			}
 		});
 	} else {
-		console.log(result);
+		$('#buyer_guest').slideDown();
+		polymerId = data.polymerId;
+		$('.hover').css("opacity" , "0.8");
+		$('.hover').css("z-index" , "2");
 	}
 }
 
@@ -304,7 +335,7 @@ function polymersList(result) {
 	$('#product_list').children().not('#title-row').remove();
 	$.each(result , function (index){
 			$('#product_list').append(
-				'<div class="row polimers-row" name="' + result[index].PolymerId + '"><span>'+result[index].Mark+'</span> <span>'+result[index].CompanyName+'</span> <span>'+result[index].PolymerPrice+'</span> <span>'+result[index].Usings+'</span> <span>'+result[index].Color+'</span> <button type="button" onclick="buyFunc(this)" class="buy">Приобрести</button></div>');
+				'<div class="row polimers-row" name="' + result[index].PolymerId + '"><span>'+result[index].Mark+'</span> <span>'+result[index].CompanyName+'</span> <span>'+result[index].PolymerPrice+'</span> <span>'+result[index].Usings+'</span> <span>'+result[index].Color+'</span> <button type="button" onclick="buyFunc(this)" class="buy">'+$button_buy+'</button></div>');
 	});
 }
 
@@ -356,7 +387,7 @@ function LogOut() {
 function dropProfile(elem) {
 	$(elem).slideDown();
 	$(elem).css("display" , "flex");
-	$('#bank').text("Банк: " + cash + "$");
+	$('#bank').text("Банк: " + $cash + "$");
 }
 
 function hideProfile(elem) {
