@@ -4,7 +4,7 @@ module.exports = function(app, passport){
   var updatemail = require('../utils/sql_util').updateMail;
   var updatepassword = require('../utils/sql_util').updatePassword;
   var order = require('../utils/sql_util').order;
-  var search = require('../utils/sql_util').searchTesk;
+  var search = require('../utils/sql_util').search;
   var ordersView = require('../utils/sql_util').ordersView;
   var catalog = require('../utils/sql_util').catalog;
   //=======================================
@@ -108,21 +108,26 @@ app.post('/updatemail',_authcheck, function(req, res){
 
 //ПОЛУЧЕНИЕ ИМЕНИ, ФАМИЛИИ И НОМЕРА ТЕЛЕФОНА В JSON формате (name, surname, mobile)
 	app.get('/userinfo',_authcheck, function(req, res){
-    
+
 			getUsername(res, req.user.email);
 	});
 
   //Оформиление заказа
   app.post('/order', function(req, res){
     if(req.isAuthenticated()){
-      var order = {
+  var now = new Date();
+//var   nowdate = now.format();
+      var _order = {
         polymerId : req.body.polymerId,
-        date : Date.now(),
-        client : req.user.email
+        date : new Date(),
+        client : req.user.email,
+        companyId: "",
+        price: "",
+        userId: ""
       };
       //product { RoadId: , UserId(Клиент): , State: , CompanyId: ,price:  }
       //order: polymerId, date, client
-      order(res, order);
+      order(res, _order);
       //res, clientlogin, sellerlogin, product)
     }
   });

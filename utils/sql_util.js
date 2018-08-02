@@ -76,13 +76,9 @@ module.exports.updatePassword = function(res, email, oldpassword, newpassword){
           _checkError(err, res,{message: 'Password successful updated'} );
 
         //  res.send('Success');
-
-
         });
-      } else {
-      //  res.send('password incorrect');
-      res.status(401).send({message: 'Password incorrect'});
-      }
+
+      } else res.status(401).send({message: 'Password incorrect'});
     }
   });
 }
@@ -92,43 +88,38 @@ module.exports.order = function(res, order){
   //order: polymerId, date, client
   var getClientCash = "SELECT cash, id FROM users WHERE email=?";
   var clientCashDecrease = "UPDATE users SET cash = cash - ? WHERE email = ?";
-  var sellerCashIncrease = "UPDATE users SET cash = cash + ? WHERE email = admin";
-  var getPolymerInfo = "SELECT CompanyId, PolymerPrice FROM Polymers WHERE PolymerId = ?";
+  var sellerCashIncrease = "UPDATE users SET cash = cash + ? WHERE email = 'admin'";
+  var getPolymerInfo = "SELECT CompanyId, PolymerPrice FROM polymers WHERE PolymerId=?";
   var insertOrder = "INSERT INTO orders (PolymerId, ClientId, CompanyId, PurchaseDate, Price) VALUES(?, ?, ?, ?, ?) ";
-  var UserId;
+
+  connection.query(getPolymerInfo, [order.polymerId], function(err, rows){
+    _checkError(err, res);
+    order.price = rows[0].PolymerPrice;
+    order.companyId = rows[0].CompanyId;
 
    connection.query(getClientCash, [order.client], function(err, rows){
      _checkError(err, res);
+     order.userId = rows[0].id;
 
-          if(rows[0].cash>product.price){
+          if(rows[0].cash>order.price){
               connection.query(clientCashDecrease, [order.price, order.client], function(err, rows){  //Снимаем деньги с покупателя
                 _checkError(err, res);
-                order.UserId = rows[0].id;
+
+                connection.query(sellerCashIncrease, [order.price], function(err, rows){ //добавляем деньги админу
+                  _checkError(err, res);
+                  connection.query(insertOrder, [order.polymerId, order.userId, order.companyId, order.date, order.price], function(err, rows){ //Добавление заказа в бд
+                    _checkError(err, res,{message: 'Заказ успешно оформлен!'});
+
+                  });
+                });
               });
 
-              connection.query(sellerCashIncrease, [order.price], function(err, rows){ //добавляем деньги админу
-                _checkError(err, res);
-              });
-
-              connection.query(getPolymerInfo, [order.polymerId], function(err, rows){
-                _checkError(err, res);
-                order.Price = rows[0].PolymerPrice;
-                order.CompanyId = rows[0].CompanyId;
-              });
-
-              connection.query(insertOrder, [order.polymerId, order.UserId, order.CompanyId,order.date, order.Price], function(err, rows){ //Добавление заказа в бд
-                _checkError(err, res,{message: 'Заказ успешно оформлен'});
-
-              });
-
-          } else {
-
-            res.send({message : 'Недостаточно средств !'});
-          }
+        } else res.send({message : 'Недостаточно средств! Пожалуйста пополните счет.'});
+          });
    });
 }
 
-module.exports.searchTesk = function(res,polymer){
+module.exports.search = function(res,polymer){
 
   var params = "";
   if(polymer.name) params += " Polymers.PolymerName= " +  polymer.name ;
