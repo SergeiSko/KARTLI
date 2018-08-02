@@ -248,23 +248,25 @@ $(document).ready(function () {
 		});
 	}
 
-	$('form[name="search-filter"] input[type="button"]').click(function (){
-		var data = {
-			name: $('input[name="polymerName"]').attr('id'),
-			type: $('input[name="polymerType"]').attr('id'),
-			oblast: $('input[name="polymerUsing"]').attr('id'),
-			color: $('input[name="polymerColor"]').attr('id')
-		};
-		$.ajax({
-			url: '/search',
-			type: 'POST',
-			data: data,
-			success: function(result) {
-				polymersList(result);
-			}
-		});
+	if ($('form[name="search-filter"] input[type="button"]')) {
+		$('form[name="search-filter"] input[type="button"]').click(function (){
+			var data = {
+				name: $('input[name="polymerName"]').attr('id'),
+				type: $('input[name="polymerType"]').attr('id'),
+				oblast: $('input[name="polymerUsing"]').attr('id'),
+				color: $('input[name="polymerColor"]').attr('id')
+			};
+			$.ajax({
+				url: '/search',
+				type: 'POST',
+				data: data,
+				success: function(result) {
+					polymersList(result);
+				}
+			});
 
-	});
+		});
+  }
 
 	$('.closer').click(function (){
 		$(this).parent().children('input').val('');
@@ -288,7 +290,7 @@ $(document).ready(function () {
 			type: 'POST',
 			data: data,
 			success: function(result) {
-				$(this).parent().parent().slideUp();
+				$('#buyer_guest').slideUp();
 				$('#buyer').slideDown();
 				$('#buyer').children('h2').text(result.message);
 				setTimeout(function (){
@@ -310,7 +312,10 @@ $(document).ready(function () {
 			url: '/ordersView',
 			type: 'GET',
 			success: function(result) {
-				polymersList(result);
+				console.log(result);
+				$.each(result , function (index){
+					$('#history').append('<div class="row"> <span>'+result[index].mark+'</span> <span>'+result[index].company+'</span> <span>'+result[index].Price+'</span> <span>'+result[index].date+'</span>	</div>');
+				});
 			}
 		});
 	}
@@ -349,12 +354,8 @@ function buyFunc(elem) {
 function polymersList(result) {
 	$('#product_list').children().not('#title-row').remove();
 	$.each(result , function (index){
-			if (result[index].date == null) {
 			$('#product_list').append(
 				'<div class="row polimers-row" name="' + result[index].PolymerId + '"><span>'+result[index].Mark+'</span> <span>'+result[index].CompanyName+'</span> <span>'+result[index].PolymerPrice+'</span> <span>'+result[index].Usings+'</span> <span>'+result[index].Color+'</span> <button type="button" onclick="buyFunc(this)" class="buy">'+$button_buy+'</button></div>');
-			} else {
-				$('#history').append('<div class="row"> <span>'+result[index].mark+'</span> <span>'+result[index].company+'</span> <span>'+result[index].Price+'</span> <span>'+result[index].date+'</span>	</div>');
-			}
 	});
 }
 
@@ -428,7 +429,6 @@ function ajaxSelect(name) {
 		url: '/catalog/polymers/' + name,
 		type: 'GET',
 		success: function(result) {
-			console.log(result);
 			$.each(result , function (index){
 				$('#' + name).append('<div class="option" id="' + result[index].elemid + '" onclick="selectChange(this)">' + result[index].elemval + '</div>');
 			});
