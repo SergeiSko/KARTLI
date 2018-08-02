@@ -183,9 +183,8 @@ module.exports.statement = function(res, order){
 }
 
 module.exports.getProcent = function(res){
-  connection.query("SELECT discount FROM discount", function(err, rows){
-    _checkError(err, res,rows[0].discount);
-
+  connection.query("SELECT * FROM discount", function(err, rows){
+    _checkError(err, res, rows);
   });
 }
 

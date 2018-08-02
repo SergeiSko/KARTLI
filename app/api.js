@@ -167,14 +167,15 @@ app.post('/updatemail',_authcheck, function(req, res){
     }
   });
 
-  app.get('/getprocent', function(req, res){
-    getProcent(res);
+  app.get('/getprocent',_authcheck, function(req, res){
+    if(req.user.email == 'admin') getProcent(res);
+     else res.status(401).send("Permission denied");
   });
 
 
   app.post('/control',_authcheck, function(req, res){
 
-      if(req.user.email = "admin"){
+      if(req.user.email = 'admin'){
         discountControl(res, req.body.procent);
       } else {
         res.status(401).send('Permission denied');
