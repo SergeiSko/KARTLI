@@ -321,13 +321,15 @@ form .alert {
 }
 
 .filter {
+	position: relative;
 	justify-content: space-around;
 	align-items: center;
 	flex-wrap: wrap;
 	margin-bottom: 25px;
+	width: 100%;
 }
 
-.filter label {
+.filter .label {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -337,19 +339,19 @@ form .alert {
 	flex-basis: 25%;
 }
 
-.filter label span {
+.filter .label span {
 	padding: 10px 0;
 	cursor: pointer;
 }
 
-.filter label input[type="text"] {
+.filter .label input[type="text"] {
 	border-radius: 5px;
 	border: 1px solid #475359;
 	padding: 10px 20px;
 	transition: transform .3s linear;
 }
 
-.filter label input[type="text"]:focus {
+.filter .label input[type="text"]:focus {
 	transform: scale(1.1);
 }
 
@@ -382,19 +384,33 @@ form .alert {
 	position: relative;
 	justify-content: space-between;
 	align-items: center;
-	width: 250px;
+	width: 85%;
 	cursor: pointer;
 	font-size: .8em;
 	background-color: #fff;
 	font-weight: bold;
 }
 
-.filter label .select-group input[type="text"] {
+.filter .closer {
+	position: absolute;
+	right: -10%;
+	border: 1px solid #475359;
+	border-radius: 100px;
+	padding: 2px 6px;
+	z-index: 3;
+}
+
+.select-group .closer:hover {
+	background-color: #475359;
+	color: #fff;
+}
+
+.filter .label .select-group input[type="text"] {
 	padding: 10px;
 	width: 100%;
 }
 
-.filter label .select-group input[type="text"]:focus {
+.filter .label .select-group input[type="text"]:focus {
 	transform: none;
 	border: 1px solid #475359;
 }
@@ -403,7 +419,7 @@ form .alert {
 	opacity: .8;
 }
 
-.filter label .select-group .select-alert {
+.filter .label .select-group .select-alert {
 	border: 2px solid #e74c3c;
 }
 
@@ -444,6 +460,8 @@ form .alert {
 	width: 80%;
 	margin-bottom: 50px;
 	padding: 20px 0;
+	height: auto;
+	transition: height .2s linear;
 }
 
 .list-wrap h2 {
@@ -455,31 +473,33 @@ form .alert {
 
 .list-wrap .row {
 	position: relative;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
+	padding: 10px 0;
 	border-bottom: 1px solid #ccc;
 	width: 100%;
+	color: #475359;
 	cursor: pointer;
-	transition: height .2s linear;
-	height: 50px;
 }
 
 .list-wrap .polimers-row:hover {
 	background-color: #475359;
-	height: 75px;
+	color: #fff;
 }
 
 .list-wrap .row span {
+	width: 200px;
+	justify-content: center;
 	padding: 10px 25px;
 	text-align: center;
-	color: #475359;
 	font-weight: bold;
 }
 
 .buy {
 	position: absolute;
-	top: 70%;
-	display: none;
+	top: 5%;
+	right: -15%;
+	display: block;
 	border: 1px solid transparent;
 	background-color: #27ae60;
 	color: #fff;
