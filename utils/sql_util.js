@@ -147,7 +147,12 @@ module.exports.search = function(res,polymer){
 
 module.exports.ordersView = function(res, email){
 
-  var ordersQuery = "SELECT * FROM(orders INNER JOIN users ON orders.ClientId = users.id) WHERE users.email=?";
+  var ordersQuery = "SELECT orders.Price , orders.PurchaseDate AS date, PolymerMarks.elemval AS mark, Companies.CompanyName AS company \
+FROM Companies INNER JOIN ((PolymerMarks INNER JOIN Polymers ON PolymerMarks.elemid = Polymers.PolymerName) \
+ INNER JOIN (users INNER JOIN orders ON users.id = orders.ClientId) ON Polymers.PolymerId = orders.PolymerId) ON \
+ (users.id = Companies.id) AND (Companies.CompanyId = Polymers.CompanyId) AND (Companies.CompanyId = orders.CompanyId) \
+WHERE users.email=? ";
+
   connection.query(ordersQuery,[email],function(err, rows){
       _checkError(err, res, rows);
 
@@ -159,6 +164,15 @@ module.exports.catalog = function(res, table){
   var catalogQuery = "SELECT * FROM " + table;
   connection.query(catalogQuery, function(err, rows){
     _checkError(err, res, rows);
+  });
+}
+
+module.exports.statement = function(res, order){
+
+  //name, surname, fathername, mobile, polymerId
+  var insertStatement = "INSERT INTO statement (name, surname, fathername, mobile, polymerId) VALUES (?, ?, ?, ?, ?)";
+  connection.query(insertStatement,[order.name, order.surname, order.fathername, order.mobile, order.polymerId], function(err, rows){
+    _checkError(err, res, {message: "Заявка успешно отправлена"});
   });
 }
 

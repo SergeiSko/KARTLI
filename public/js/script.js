@@ -1,4 +1,4 @@
-var $cash, $button_buy;
+var $cash, $button_buy, $polymerId;
 $(document).ready(function () {
 
 	if ($('div.black')) {
@@ -272,14 +272,16 @@ $(document).ready(function () {
 		$(this).parent().children('input').blur();
 	});
 
-	$('form[name="guest-form"]').submit(function(){
+	$('form[name="guest-form"]').submit(function(e){
 		var data = {
-			polymerId: polymerId,
-			name: $('input[name="guest_name"]'),
-			surname: $('input[name="guest_surname"]'),
-			fathername: $('input[name="guest_fathername"]'),
-			phonenumber: $('input[name="guest_phone"]')
+			polymerId: $polymerId,
+			name: $('input[name="guest_name"]').val(),
+			surname: $('input[name="guest_surname"]').val(),
+			fathername: $('input[name="guest_fathername"]').val(),
+			phonenumber: $('input[name="guest_phone"]').val()
 		}
+
+		console.log(data);
 
 		$.ajax({
 			url: '/order',
@@ -294,13 +296,26 @@ $(document).ready(function () {
 					$('.hover').css("opacity" , "0.1");
 					$('.hover').css("z-index" , "0");
 				}, 2000);
+			},
+			error: function(result) {
+				console.log(result);
 			}
 		});
+
+		e.preventDefault();
 	});
 
-}); //onload closed
+	if ($('#history')) {
+		$.ajax({
+			url: '/ordersView',
+			type: 'GET',
+			success: function(result) {
+				polymersList(result);
+			}
+		});
+	}
 
-var polymerId;
+}); //onload closed
 
 function buyFunc(elem) {
 	var data = {
@@ -325,7 +340,7 @@ function buyFunc(elem) {
 		});
 	} else {
 		$('#buyer_guest').slideDown();
-		polymerId = data.polymerId;
+		$polymerId = data.polymerId;
 		$('.hover').css("opacity" , "0.8");
 		$('.hover').css("z-index" , "2");
 	}
@@ -334,8 +349,12 @@ function buyFunc(elem) {
 function polymersList(result) {
 	$('#product_list').children().not('#title-row').remove();
 	$.each(result , function (index){
+			if (result[index].date == null) {
 			$('#product_list').append(
 				'<div class="row polimers-row" name="' + result[index].PolymerId + '"><span>'+result[index].Mark+'</span> <span>'+result[index].CompanyName+'</span> <span>'+result[index].PolymerPrice+'</span> <span>'+result[index].Usings+'</span> <span>'+result[index].Color+'</span> <button type="button" onclick="buyFunc(this)" class="buy">'+$button_buy+'</button></div>');
+			} else {
+				$('#history').append('<div class="row"> <span>'+result[index].mark+'</span> <span>'+result[index].company+'</span> <span>'+result[index].Price+'</span> <span>'+result[index].date+'</span>	</div>');
+			}
 	});
 }
 

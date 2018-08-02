@@ -7,6 +7,7 @@ module.exports = function(app, passport){
   var search = require('../utils/sql_util').search;
   var ordersView = require('../utils/sql_util').ordersView;
   var catalog = require('../utils/sql_util').catalog;
+  var statementAdd = require('../utils/sql_util').statement;
   //=======================================
   // API
   //========================================
@@ -130,14 +131,16 @@ app.post('/updatemail',_authcheck, function(req, res){
       order(res, _order);
       //res, clientlogin, sellerlogin, product)
     } else {
-      var now = new date();
-
+      var now = new Date();
       var _order = {
         name : req.body.name,
         surname: req.body.surname,
         fathername: req.body.fathername,
-        mobile: req.body.mobile
-      }
+        mobile: req.body.phonenumber,
+        polymerId: req.body.polymerId
+      };
+      //name, surname, fathername, mobile, polymerId
+      statementAdd(res, _order);
     }
 
   });
