@@ -8,6 +8,7 @@ module.exports = function(app, passport){
   var ordersView = require('../utils/sql_util').ordersView;
   var catalog = require('../utils/sql_util').catalog;
   var statementAdd = require('../utils/sql_util').statement;
+  var discountControl = require('../utils/sql_util').discountControl;
   //=======================================
   // API
   //========================================
@@ -149,6 +150,7 @@ app.post('/updatemail',_authcheck, function(req, res){
 
   app.get('/ordersView',_authcheck, function(req, res){
       ordersView(res, req.user.email);
+
   });
 
   app.get('/catalog/polymers/:type', function(req, res){
@@ -159,6 +161,14 @@ app.post('/updatemail',_authcheck, function(req, res){
       case 'using': catalog(res, 'polymerusing'); break;
       case 'colors': catalog(res, 'colors'); break;
       default: res.status(400).send('unknown request');
+    }
+  });
+
+  app.post('/control',_authcheck, function(req, res){
+    if(req.user.email = "admin"){
+      discountControl(res, req.body.discount);
+    } else {
+      res.status(401).send('Permission denied');
     }
   });
 

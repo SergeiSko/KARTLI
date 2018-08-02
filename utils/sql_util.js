@@ -85,6 +85,7 @@ module.exports.updatePassword = function(res, email, oldpassword, newpassword){
 
 module.exports.order = function(res, order){
 
+  var discount = 100;
   //order: polymerId, date, client
   var getClientCash = "SELECT cash, id FROM users WHERE email=?";
   var clientCashDecrease = "UPDATE users SET cash = cash - ? WHERE email = ?";
@@ -92,12 +93,17 @@ module.exports.order = function(res, order){
   var getPolymerInfo = "SELECT CompanyId, PolymerPrice FROM polymers WHERE PolymerId=?";
   var insertOrder = "INSERT INTO orders (PolymerId, ClientId, CompanyId, PurchaseDate, Price) VALUES(?, ?, ?, ?, ?) ";
 
+  connection.query("SELECT discount FROM discount", function(err, rows){
+    _checkError(err, res);
+    discount = rows[0].discount;
+  });
+
   connection.query(getPolymerInfo, [order.polymerId], function(err, rows){
     _checkError(err, res);
-    order.price = rows[0].PolymerPrice;
+    order.price = rows[0].PolymerPrice + rows[0].PolymerPrice*discount/100;
     order.companyId = rows[0].CompanyId;
-
-   connection.query(getClientCash, [order.client], function(err, rows){
+    console.log(discount);
+    connection.query(getClientCash, [order.client], function(err, rows){
      _checkError(err, res);
      order.userId = rows[0].id;
 
@@ -150,7 +156,7 @@ module.exports.ordersView = function(res, email){
   var ordersQuery = "SELECT orders.Price , orders.PurchaseDate AS date, PolymerMarks.elemval AS mark, Companies.CompanyName AS company \
 FROM Companies INNER JOIN ((PolymerMarks INNER JOIN Polymers ON PolymerMarks.elemid = Polymers.PolymerName) \
  INNER JOIN (users INNER JOIN orders ON users.id = orders.ClientId) ON Polymers.PolymerId = orders.PolymerId) ON \
- (users.id = Companies.id) AND (Companies.CompanyId = Polymers.CompanyId) AND (Companies.CompanyId = orders.CompanyId) \
+ (users.id = orders.ClientId) AND (Companies.CompanyId = Polymers.CompanyId) AND (Companies.CompanyId = orders.CompanyId) \
 WHERE users.email=? ";
 
   connection.query(ordersQuery,[email],function(err, rows){
@@ -174,6 +180,12 @@ module.exports.statement = function(res, order){
   connection.query(insertStatement,[order.name, order.surname, order.fathername, order.mobile, order.polymerId], function(err, rows){
     _checkError(err, res, {message: "Заявка успешно отправлена"});
   });
+}
+
+module.exports.discountControl = function(res, discount){
+  connection.query("UPDATE discount SET discount = ?", [discount], function(err, rows){
+    _checkError(err, res, {message: "Процент успешно изменился"});
+  })
 }
 
 function _checkError(error, response,successMessage){

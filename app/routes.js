@@ -25,7 +25,11 @@ app.get('/', function(req, res){
 	}
 });
 
-
+app.get('/control',isLoggedIn, function(req, res){
+	if(req.user.email == "admin"){
+		res.sendfile('public/admin-profile.html');
+	} else res.redirect('/');
+})
 
 }; //КОНЕЦ ЭКСПОРТА
 
