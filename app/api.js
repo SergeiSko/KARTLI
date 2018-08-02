@@ -129,8 +129,20 @@ app.post('/updatemail',_authcheck, function(req, res){
       //order: polymerId, date, client
       order(res, _order);
       //res, clientlogin, sellerlogin, product)
+    } else {
+      var now = new date();
+
+      var _order = {
+        name : req.body.name,
+        surname: req.body.surname,
+        fathername: req.body.fathername,
+        mobile: req.body.mobile
+      }
     }
+
   });
+
+
 
   app.get('/ordersView',_authcheck, function(req, res){
       ordersView(res, req.user.email);
