@@ -71,13 +71,16 @@ module.exports = function(app, passport){
   //ПОИСК ПОСТАВЩИКОВ ПО 4 ПАРАМЕТРАМ: Название, Тип, Область применения, Цвет
 
   app.post('/search', function(req, res){
-    var polymerName = req.body.name;
-    var polymerType = req.body.type;
-    var polymerUsing = req.body.oblast;
-    var polymerColor = req.body.color;
+    var polymer = {
+      name : req.body.name,
+      type: req.body.type,
+      using: req.body.oblast,
+      color: req.body.color
+    };
+
     console.log(req.body);
   //  res.send('k');
-    search(res, polymerName, polymerType, polymerUsing, polymerColor);
+    search(res, polymer);
   });
 
   //СМЕНА ПОЧТЫ
@@ -105,7 +108,7 @@ app.post('/updatemail',_authcheck, function(req, res){
 
 //ПОЛУЧЕНИЕ ИМЕНИ, ФАМИЛИИ И НОМЕРА ТЕЛЕФОНА В JSON формате (name, surname, mobile)
 	app.get('/userinfo',_authcheck, function(req, res){
-
+    
 			getUsername(res, req.user.email);
 	});
 

@@ -18,7 +18,7 @@ module.exports.updateProfile = function(name, surname, fathername, phonenumber, 
 };
 
 module.exports.getInfo = function(res, email){
-  var query = "SELECT * FROM users INNER JOIN usertype ON usertype.usertypeid = users.usertypeid WHERE email = ?";
+  var query = "SELECT * FROM users WHERE email = ?";
   connection.query(query, [email], function(err, rows){
 
     if(rows) {
@@ -27,7 +27,6 @@ module.exports.getInfo = function(res, email){
         surname : rows[0].surname,
         fathername : rows[0].fathername,
         mobile : rows[0].phonenumber,
-        usertype : rows[0].usertype,
         cash : rows[0].cash,
         email : email
       }
@@ -129,15 +128,26 @@ module.exports.order = function(res, order){
    });
 }
 
-module.exports.searchTesk = function(res, polymerName, polymerType, polymerUsing, polymerColor){
+module.exports.searchTesk = function(res,polymer){
 
-  var searchCompany = "SELECT Companies.CompanyName, Polymers.PolymerName, Polymers.Capacity, Polymers.PolymerPrice, Polymers.Color, Polymers.PolymerId\
-FROM  (INNER JOIN Polymers ON Companies.CompanyId = Polymers.CompanyId) \
-WHERE Polymers.PolymerName= ? AND Polymers.PolymerType= ? AND Polymers.PolymerUsing= ? AND Polymers.Color = ?";
+  var params = "";
+  if(polymer.name) params += " Polymers.PolymerName= " +  polymer.name ;
+  if(polymer.type) if(params.length) params += " AND Polymers.PolymerType= " + polymer.type; else params +=" Polymers.PolymerType= "+ polymer.type;
+  if(polymer.using)if(params.length) params += " AND Polymers.PolymerUsing= " + polymer.using; else params +=" Polymers.PolymerUsing= "+ polymer.using;
+  if(polymer.color) if(params.length) params += " AND Polymers.Color = " + polymer.color; else params +=" Polymers.Color = " + polymer.color;
 
+  if(params.length) params = "WHERE " + params;
+  var searchquery = "SELECT polymers.PolymerPrice, polymerMarks.elemval AS Mark, \
+   polymerTypes.elemval AS Type, polymerUsing.elemval AS Usings , \
+    Colors.elemval AS Color, Companies.CompanyName \
+    FROM Companies INNER JOIN (PolymerUsing INNER JOIN (PolymerTypes INNER JOIN \
+   (PolymerMarks INNER JOIN (Colors INNER JOIN Polymers ON Colors.elemid = Polymers.Color) \
+   ON PolymerMarks.elemid = Polymers.PolymerName) ON PolymerTypes.elemid = Polymers.PolymerType) \
+   ON PolymerUsing.elemid = Polymers.PolymerUsing) ON Companies.CompanyId = Polymers.CompanyId \
+  " + params;
 
 //[polymerName, polymerType, polymerUsing, polymerColor]
-      connection.query(searchCompany,[polymerName, polymerType, polymerUsing, polymerColor], function(err, rows){
+      connection.query(searchquery, function(err, rows){
           _checkError(err, res, rows);
           console.log(rows);
         });
@@ -158,7 +168,6 @@ module.exports.catalog = function(res, table){
   var catalogQuery = "SELECT * FROM " + table;
   connection.query(catalogQuery, function(err, rows){
     _checkError(err, res, rows);
-
   });
 }
 
