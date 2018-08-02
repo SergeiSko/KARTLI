@@ -16,31 +16,6 @@ $(document).ready(function () {
 				}
 		});
 	}
-	if ($('.buy')) {
-		$('.buy').click(function (){
-			var data = $(this).parent().attr('id');
-			if ($(this).text() == "Приобрести") {
-				$.ajax({
-					url: '/',
-					type: 'POST',
-					data: data,
-					success: function(result) {
-						$('#buyer').slideDown();
-						$('.hover').css("opacity" , "0.8");
-						$('.hover').css("z-index" , "2");
-						$('#buyer').children('h2').text(result);
-						setTimeout(function (){
-							$('#buyer').slideUp();
-							$('.hover').css("opacity" , "0.1");
-							$('.hover').css("z-index" , "0");
-						}, 1000);
-					}
-				});
-			} else {
-				console.log(data);
-			}
-		});
-	}
 
 	if ($('div.black')) {
 		$.ajax({
@@ -298,13 +273,38 @@ $(document).ready(function () {
 
 }); //onload closed
 
+function buyFunc(elem) {
+	console.log('asd');
+	var data = {
+		polymerId: $(elem).parent().attr('name')
+	}
+	if ($(elem).text() == "Приобрести") {
+		$.ajax({
+			url: '/order',
+			type: 'POST',
+			data: data,
+			success: function(result) {
+				$('#buyer').slideDown();
+				$('.hover').css("opacity" , "0.8");
+				$('.hover').css("z-index" , "2");
+				$('#buyer').children('h2').text(result.message);
+				setTimeout(function (){
+					$('#buyer').slideUp();
+					$('.hover').css("opacity" , "0.1");
+					$('.hover').css("z-index" , "0");
+				}, 2000);
+			}
+		});
+	} else {
+		console.log(result);
+	}
+}
+
 function polymersList(result) {
 	$('#product_list').children().not('#title-row').remove();
-	var i = 0;
 	$.each(result , function (index){
-		i++;
 			$('#product_list').append(
-				'<div class="row polimers-row" name="' + i + '"><span>'+result[index].Mark+'</span> <span>'+result[index].CompanyName+'</span> <span>'+result[index].PolymerPrice+'</span> <span>'+result[index].Usings+'</span> <span>'+result[index].Color+'</span> <button type="button" name="button" class="buy">Приобрести</button></div>');
+				'<div class="row polimers-row" name="' + result[index].PolymerId + '"><span>'+result[index].Mark+'</span> <span>'+result[index].CompanyName+'</span> <span>'+result[index].PolymerPrice+'</span> <span>'+result[index].Usings+'</span> <span>'+result[index].Color+'</span> <button type="button" onclick="buyFunc(this)" class="buy">Приобрести</button></div>');
 	});
 }
 
