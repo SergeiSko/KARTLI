@@ -183,9 +183,16 @@ module.exports.statement = function(res, order){
 }
 
 module.exports.discountControl = function(res, discount){
-  connection.query("UPDATE discount SET discount = ?", [discount], function(err, rows){
-    _checkError(err, res, {message: "Процент успешно изменился"});
-  })
+  if(discount){
+    connection.query("UPDATE discount SET discount = ?", [discount], function(err, rows){
+      _checkError(err, res, {message: "Процент успешно изменился", discount: discount});
+    });
+  } else {
+    connection.query("SELECT discount FROM discount", function(err, rows){
+      res.send(rows[0].discount);
+    });
+  }
+
 }
 
 function _checkError(error, response,successMessage){
