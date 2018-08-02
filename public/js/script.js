@@ -272,7 +272,7 @@ $(document).ready(function () {
 		$(this).parent().children('input').blur();
 	});
 
-	$('input[name="guest_send"]').click(function(){
+	$('form[name="guest-form"]').submit(function(){
 		var data = {
 			polymerId: polymerId,
 			name: $('input[name="guest_name"]'),
