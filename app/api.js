@@ -125,7 +125,8 @@ app.post('/updatemail',_authcheck, function(req, res){
         client : req.user.email,
         companyId: "",
         price: "",
-        userId: ""
+        userId: "",
+        balance: ""
       };
       //product { RoadId: , UserId(Клиент): , State: , CompanyId: ,price:  }
       //order: polymerId, date, client
@@ -139,6 +140,7 @@ app.post('/updatemail',_authcheck, function(req, res){
         fathername: req.body.fathername,
         mobile: req.body.phonenumber,
         polymerId: req.body.polymerId
+
       };
       //name, surname, fathername, mobile, polymerId
       statementAdd(res, _order);

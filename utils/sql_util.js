@@ -106,7 +106,7 @@ module.exports.order = function(res, order){
     connection.query(getClientCash, [order.client], function(err, rows){
      _checkError(err, res);
      order.userId = rows[0].id;
-
+     order.balance = rows[0].cash - order.price;
           if(rows[0].cash>order.price){
               connection.query(clientCashDecrease, [order.price, order.client], function(err, rows){  //Снимаем деньги с покупателя
                 _checkError(err, res);
@@ -114,7 +114,7 @@ module.exports.order = function(res, order){
                 connection.query(sellerCashIncrease, [order.price], function(err, rows){ //добавляем деньги админу
                   _checkError(err, res);
                   connection.query(insertOrder, [order.polymerId, order.userId, order.companyId, order.date, order.price], function(err, rows){ //Добавление заказа в бд
-                    _checkError(err, res,{message: 'Заказ успешно оформлен!'});
+                    _checkError(err, res,{message: 'Заказ успешно оформлен!', cash: order.balance});
 
                   });
                 });
