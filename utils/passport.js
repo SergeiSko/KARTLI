@@ -55,7 +55,7 @@ module.exports = function(passport) {
                     var insertQuery = "INSERT INTO users ( email, password, cash ) values (?,?,?)";
                     console.log(newUserMysql);
                     //ВЫПОЛНЕНИЕ SQL ЗАПРОСА
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.password, 0],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.password, 50000],function(err, rows) {
                       console.log(rows);
                         newUserMysql.id = rows.insertId;
                         return done(null, newUserMysql);
